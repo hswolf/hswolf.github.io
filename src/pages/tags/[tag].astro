@@ -1,0 +1,79 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PostCard from '../../components/PostCard.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const allBlog = await getCollection('blog', ({ data }) => !data.draft);
+  const allLife = await getCollection('life', ({ data }) => !data.draft);
+  const allPoetry = await getCollection('poetry', ({ data }) => !data.draft);
+
+  const allPosts = [
+    ...allBlog.map((p) => ({ ...p, collection: 'blog' as const })),
+    ...allLife.map((p) => ({ ...p, collection: 'life' as const })),
+    ...allPoetry.map((p) => ({ ...p, collection: 'poetry' as const })),
+  ];
+
+  const uniqueTags = [...new Set(allPosts.flatMap((post) => post.data.tags))];
+
+  return uniqueTags.map((tag) => ({
+    params: { tag },
+    props: {
+      tag,
+      posts: allPosts
+        .filter((post) => post.data.tags.includes(tag))
+        .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()),
+    },
+  }));
+}
+
+interface Props {
+  tag: string;
+  posts: Array<{
+    id: string;
+    data: { title: string; description: string; pubDate: Date; tags: string[]; lang: 'vi' | 'en' };
+    collection: 'blog' | 'life' | 'poetry';
+  }>;
+}
+
+const { tag, posts } = Astro.props;
+
+function getPostHref(post: Props['posts'][number]) {
+  const prefix = post.collection === 'poetry' ? 'tho' : post.collection;
+  return `/${prefix}/${post.id}`;
+}
+---
+
+<BaseLayout title={`#${tag}`} description={`Các bài viết với tag #${tag}`}>
+  <div class="tag-page">
+    <h1>#{tag}</h1>
+    <p class="count">{posts.length} bài viết</p>
+    {posts.map((post) => (
+      <PostCard
+        title={post.data.title}
+        description={post.data.description}
+        pubDate={post.data.pubDate}
+        tags={post.data.tags}
+        href={getPostHref(post)}
+        lang={post.data.lang}
+      />
+    ))}
+  </div>
+</BaseLayout>
+
+<style>
+  .tag-page {
+    max-width: var(--max-width-content);
+    margin: 0 auto;
+  }
+
+  h1 {
+    font-size: var(--text-2xl);
+    margin-bottom: var(--space-xs);
+  }
+
+  .count {
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-lg);
+  }
+</style>

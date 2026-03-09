@@ -1,0 +1,85 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import FormattedDate from '../../components/FormattedDate.astro';
+import TagList from '../../components/TagList.astro';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('poetry', ({ data }) => !data.draft);
+  return posts.map((post) => ({
+    params: { slug: post.id },
+    props: post,
+  }));
+}
+
+const post = Astro.props;
+const { Content } = await render(post);
+---
+
+<BaseLayout title={post.data.title} description={post.data.description}>
+  <article class="poem">
+    <header>
+      <h1>{post.data.title}</h1>
+      {post.data.subtitle && <p class="subtitle">{post.data.subtitle}</p>}
+      <div class="meta">
+        <FormattedDate date={post.data.pubDate} lang={post.data.lang} />
+      </div>
+    </header>
+    <div class="poem-content">
+      <Content />
+    </div>
+    <footer class="poem-footer">
+      <TagList tags={post.data.tags} />
+    </footer>
+  </article>
+</BaseLayout>
+
+<style>
+  .poem {
+    max-width: var(--max-width-content);
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  header {
+    margin-bottom: var(--space-xl);
+  }
+
+  h1 {
+    font-size: var(--text-2xl);
+    margin-bottom: var(--space-sm);
+  }
+
+  .subtitle {
+    font-style: italic;
+    color: var(--color-text-muted);
+    font-size: var(--text-base);
+  }
+
+  .meta {
+    margin-top: var(--space-md);
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+  }
+
+  .poem-content {
+    font-family: var(--font-heading);
+    font-size: var(--text-lg);
+    line-height: 2.2;
+    white-space: pre-wrap;
+    padding: var(--space-xl) 0;
+  }
+
+  .poem-content :global(p) {
+    margin-bottom: var(--space-lg);
+  }
+
+  .poem-footer {
+    padding-top: var(--space-lg);
+    border-top: 1px solid var(--color-border);
+  }
+
+  .poem-footer :global(.tags) {
+    justify-content: center;
+  }
+</style>

@@ -1,0 +1,92 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import FormattedDate from '../components/FormattedDate.astro';
+import TagList from '../components/TagList.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  pubDate: Date;
+  updatedDate?: Date;
+  heroImage?: string;
+  tags: string[];
+  lang?: 'vi' | 'en';
+  collection: string;
+}
+
+const { title, description, pubDate, updatedDate, heroImage, tags, lang = 'vi', collection } = Astro.props;
+---
+
+<BaseLayout title={title} description={description} image={heroImage}>
+  <article class="post">
+    <header class="post-header">
+      <div class="post-meta">
+        <span class="collection-label">{collection}</span>
+        <FormattedDate date={pubDate} lang={lang} />
+        {updatedDate && (
+          <span class="updated">
+            (cập nhật: <FormattedDate date={updatedDate} lang={lang} />)
+          </span>
+        )}
+      </div>
+      <h1>{title}</h1>
+      <TagList tags={tags} />
+    </header>
+    {heroImage && (
+      <img class="hero-image" src={heroImage} alt={title} />
+    )}
+    <div class="prose">
+      <slot />
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .post {
+    max-width: var(--max-width-content);
+    margin: 0 auto;
+  }
+
+  .post-header {
+    margin-bottom: var(--space-xl);
+    text-align: center;
+  }
+
+  .post-meta {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-sm);
+    flex-wrap: wrap;
+  }
+
+  .collection-label {
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-accent);
+    font-weight: 500;
+  }
+
+  .updated {
+    font-style: italic;
+  }
+
+  h1 {
+    font-size: var(--text-2xl);
+    margin-bottom: var(--space-md);
+    line-height: 1.2;
+  }
+
+  .post-header :global(.tags) {
+    justify-content: center;
+  }
+
+  .hero-image {
+    width: 100%;
+    border-radius: 6px;
+    margin-bottom: var(--space-xl);
+  }
+</style>

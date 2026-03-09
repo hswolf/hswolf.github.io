@@ -1,0 +1,67 @@
+---
+import FormattedDate from './FormattedDate.astro';
+import TagList from './TagList.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  pubDate: Date;
+  tags: string[];
+  href: string;
+  lang?: 'vi' | 'en';
+}
+
+const { title, description, pubDate, tags, href, lang = 'vi' } = Astro.props;
+---
+
+<article class="post-card">
+  <a href={href} class="post-link">
+    <h3>{title}</h3>
+  </a>
+  <div class="meta">
+    <FormattedDate date={pubDate} lang={lang} />
+  </div>
+  <p class="description">{description}</p>
+  <TagList tags={tags} />
+</article>
+
+<style>
+  .post-card {
+    padding: var(--space-lg) 0;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .post-card:last-child {
+    border-bottom: none;
+  }
+
+  .post-link {
+    text-decoration: none;
+  }
+
+  .post-link h3 {
+    font-size: var(--text-lg);
+    color: var(--color-text);
+    transition: color 0.2s ease;
+  }
+
+  .post-link:hover h3 {
+    color: var(--color-accent);
+  }
+
+  .meta {
+    margin-top: var(--space-xs);
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+  }
+
+  .description {
+    margin-top: var(--space-sm);
+    color: var(--color-text-muted);
+    line-height: 1.6;
+  }
+
+  .post-card :global(.tags) {
+    margin-top: var(--space-sm);
+  }
+</style>

@@ -1,0 +1,82 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PostCard from '../components/PostCard.astro';
+import { getCollection } from 'astro:content';
+
+const allBlog = await getCollection('blog', ({ data }) => !data.draft);
+const allLife = await getCollection('life', ({ data }) => !data.draft);
+const allPoetry = await getCollection('poetry', ({ data }) => !data.draft);
+
+const allPosts = [
+  ...allBlog.map((p) => ({ ...p, collection: 'blog' as const })),
+  ...allLife.map((p) => ({ ...p, collection: 'life' as const })),
+  ...allPoetry.map((p) => ({ ...p, collection: 'poetry' as const })),
+]
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+  .slice(0, 6);
+
+function getPostHref(post: (typeof allPosts)[number]) {
+  const prefix = post.collection === 'poetry' ? 'tho' : post.collection;
+  return `/${prefix}/${post.id}`;
+}
+---
+
+<BaseLayout title="Trang chủ" description="Blog cá nhân của Vinh - code, cuộc sống, và thơ từ Đà Lạt">
+  <div class="home">
+    <section class="intro">
+      <h1>Xin chào</h1>
+      <p>
+        Mình là Vinh, đang sống ở Đà Lạt.
+        <br />
+        Viết về code, cuộc sống, và đôi khi là thơ.
+      </p>
+    </section>
+
+    <section class="latest">
+      <h2>Bài viết mới</h2>
+      {allPosts.map((post) => (
+        <PostCard
+          title={post.data.title}
+          description={post.data.description}
+          pubDate={post.data.pubDate}
+          tags={post.data.tags}
+          href={getPostHref(post)}
+          lang={post.data.lang}
+        />
+      ))}
+    </section>
+  </div>
+</BaseLayout>
+
+<style>
+  .home {
+    max-width: var(--max-width-content);
+    margin: 0 auto;
+  }
+
+  .intro {
+    text-align: center;
+    padding: var(--space-2xl) 0;
+  }
+
+  .intro h1 {
+    font-size: var(--text-3xl);
+    margin-bottom: var(--space-md);
+  }
+
+  .intro p {
+    font-size: var(--text-lg);
+    color: var(--color-text-muted);
+    line-height: 1.8;
+  }
+
+  .latest {
+    padding-top: var(--space-lg);
+    border-top: 1px solid var(--color-border);
+  }
+
+  .latest h2 {
+    font-size: var(--text-xl);
+    margin-bottom: var(--space-md);
+  }
+</style>

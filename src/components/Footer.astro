@@ -1,0 +1,37 @@
+---
+const year = new Date().getFullYear();
+---
+
+<footer>
+  <div class="footer-content">
+    <p>&copy; {year} vinh.to</p>
+    <a href="/rss.xml">RSS</a>
+  </div>
+</footer>
+
+<style>
+  footer {
+    margin-top: auto;
+    padding: var(--space-xl) var(--space-md);
+    border-top: 1px solid var(--color-border);
+  }
+
+  .footer-content {
+    max-width: var(--max-width-wide);
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+  }
+
+  a {
+    color: var(--color-text-muted);
+    text-decoration: none;
+  }
+
+  a:hover {
+    color: var(--color-accent);
+  }
+</style>

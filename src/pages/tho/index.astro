@@ -1,0 +1,94 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import FormattedDate from '../../components/FormattedDate.astro';
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('poetry', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+---
+
+<BaseLayout title="Thơ" description="Thơ thẩn">
+  <div class="listing">
+    <h1>Thơ</h1>
+    <p class="subtitle">Thơ thẩn</p>
+    <div class="poems">
+      {posts.map((post) => (
+        <a href={`/tho/${post.id}`} class="poem-entry">
+          <span class="poem-title">{post.data.title}</span>
+          {post.data.subtitle && <span class="poem-subtitle">{post.data.subtitle}</span>}
+          <span class="poem-date">
+            <FormattedDate date={post.data.pubDate} lang={post.data.lang} />
+          </span>
+        </a>
+      ))}
+      {posts.length === 0 && <p class="empty">Chưa có bài thơ nào.</p>}
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .listing {
+    max-width: var(--max-width-content);
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  h1 {
+    font-size: var(--text-2xl);
+    margin-bottom: var(--space-xs);
+  }
+
+  .subtitle {
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-xl);
+  }
+
+  .poems {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+  }
+
+  .poem-entry {
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    padding: var(--space-md) 0;
+    border-bottom: 1px solid var(--color-border);
+    transition: color 0.2s ease;
+  }
+
+  .poem-entry:last-child {
+    border-bottom: none;
+  }
+
+  .poem-title {
+    font-family: var(--font-heading);
+    font-size: var(--text-lg);
+    color: var(--color-text);
+    transition: color 0.2s ease;
+  }
+
+  .poem-entry:hover .poem-title {
+    color: var(--color-accent);
+  }
+
+  .poem-subtitle {
+    font-style: italic;
+    color: var(--color-text-muted);
+    font-size: var(--text-sm);
+    margin-top: var(--space-xs);
+  }
+
+  .poem-date {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+    margin-top: var(--space-xs);
+  }
+
+  .empty {
+    color: var(--color-text-muted);
+    font-style: italic;
+    padding: var(--space-xl) 0;
+  }
+</style>

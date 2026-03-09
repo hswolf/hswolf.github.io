@@ -1,0 +1,51 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="About" description="Về Vinh - developer, thiền giả, và người yêu Đà Lạt">
+  <div class="about">
+    <h1>About</h1>
+
+    <div class="prose">
+      <p>
+        Mình là Vinh. Sinh năm 1990, tuổi Ngựa, mệnh Thổ.
+        Đang sống và làm việc ở Đà Lạt.
+      </p>
+
+      <p>
+        Hàng ngày mình code, đọc sách, chơi pickleball, tập yoga và thiền.
+        Thỉnh thoảng đi dạo ngắm mây trời, nghe nhạc đủ thể loại - từ thiền,
+        indie, mantra đến rock, rap, hiphop, pop.
+      </p>
+
+      <p>
+        Website này là nơi mình lưu trữ suy nghĩ, chia sẻ kiến thức kỹ thuật,
+        viết linh tinh về cuộc sống, và thơ thẩn. Không có comment, không có
+        like, chỉ là một góc nhỏ trên internet của mình.
+      </p>
+
+      <p>
+        Mình thích sự đơn giản và tĩnh lặng.
+        Thiết kế website này lấy cảm hứng từ đất - gam màu be, nâu, vàng -
+        những tông màu của mệnh Thổ.
+      </p>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .about {
+    max-width: var(--max-width-content);
+    margin: 0 auto;
+  }
+
+  h1 {
+    font-size: var(--text-2xl);
+    margin-bottom: var(--space-xl);
+    text-align: center;
+  }
+
+  .about .prose p {
+    margin-bottom: var(--space-lg);
+  }
+</style>

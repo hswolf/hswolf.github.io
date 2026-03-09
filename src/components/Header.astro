@@ -1,0 +1,75 @@
+---
+const pathname = Astro.url.pathname;
+---
+
+<header>
+  <nav>
+    <a href="/" class="site-name">vinh.to</a>
+    <div class="nav-links">
+      <a href="/blog" class:list={[{ active: pathname.startsWith('/blog') }]}>Blog</a>
+      <a href="/life" class:list={[{ active: pathname.startsWith('/life') }]}>Life</a>
+      <a href="/tho" class:list={[{ active: pathname.startsWith('/tho') }]}>Thơ</a>
+      <a href="/about" class:list={[{ active: pathname === '/about' || pathname === '/about/' }]}>About</a>
+    </div>
+  </nav>
+</header>
+
+<style>
+  header {
+    padding: var(--space-lg) var(--space-md);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  nav {
+    max-width: var(--max-width-wide);
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: var(--space-md);
+  }
+
+  .site-name {
+    font-family: var(--font-heading);
+    font-size: var(--text-xl);
+    font-weight: 600;
+    color: var(--color-text);
+    text-decoration: none;
+    letter-spacing: -0.02em;
+  }
+
+  .site-name:hover {
+    color: var(--color-accent);
+  }
+
+  .nav-links {
+    display: flex;
+    gap: var(--space-lg);
+  }
+
+  .nav-links a {
+    color: var(--color-text-muted);
+    text-decoration: none;
+    font-size: var(--text-sm);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    transition: color 0.2s ease;
+  }
+
+  .nav-links a:hover,
+  .nav-links a.active {
+    color: var(--color-accent);
+  }
+
+  @media (max-width: 480px) {
+    nav {
+      justify-content: center;
+      text-align: center;
+    }
+
+    .nav-links {
+      gap: var(--space-md);
+    }
+  }
+</style>
