@@ -155,10 +155,14 @@ img {
   text-decoration: underline;
 }
 
-.prose img {
+.prose img,
+.prose video {
   border-radius: 6px;
   margin: var(--space-lg) 0;
+  max-width: 100%;
+  height: auto;
 }
+
 
 .prose table {
   width: 100%;

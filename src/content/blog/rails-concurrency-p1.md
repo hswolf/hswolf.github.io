@@ -58,7 +58,9 @@ Trước khi nói về Rails, cần làm rõ mối quan hệ giữa ba khái ni�
 
 Chính **OS scheduler** là người điều phối — nó quyết định thread nào được đưa lên CPU chạy tại từng thời điểm, bất kể thread đó thuộc process nào.
 
-![OS Thread Scheduler — Rails Process A, Sidekiq Process B, 2 CPU Cores](/rails-concurrency-thread-scheduler.gif)
+<video autoplay loop muted playsinline>
+  <source src="/rails-concurrency-os-scheduler.webm" type="video/webm" />
+</video>
 
 *OS scheduler giao thread cho từng CPU core độc lập — Core 1 và Core 2 có thể chạy hai thread khác nhau cùng lúc, bất kể chúng thuộc process nào. Đây là lý do số CPU core ảnh hưởng trực tiếp đến số thread có thể chạy song song thực sự.*
 
@@ -101,7 +103,9 @@ GC cũng hưởng lợi từ GVL — nhưng GC chỉ là một trong nhiều th�
 
 Nghe có vẻ tệ? Trên thực tế thì không — vì GVL tự động được nhả ra khi thread đợi I/O:
 
-![Ruby GVL — Thread 1 & Thread 2, concurrent DB queries with GVL handoff](/rails-concurrency-ruby-gvl.gif)
+<video autoplay loop muted playsinline>
+  <source src="/rails-concurrency-gvl.webm" type="video/webm" />
+</video>
 
 *Khi Thread 1 chờ DB, nó nhả GVL — Thread 2 lập tức chiếm lock và bắt đầu chạy. Cả hai thread thực chất đang chờ DB song song, dù chỉ một thread giữ GVL tại mỗi thời điểm.*
 
