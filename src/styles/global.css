@@ -90,7 +90,7 @@ img {
 
 .prose h2 {
   font-size: var(--text-xl);
-  margin-top: var(--space-xl);
+  margin-top: var(--space-lg);
   margin-bottom: var(--space-md);
 }
 
@@ -148,7 +148,7 @@ img {
 .prose hr {
   border: none;
   border-top: 1px solid var(--color-border);
-  margin: var(--space-xl) 0;
+  margin: var(--space-lg) 0;
 }
 
 .prose a {
