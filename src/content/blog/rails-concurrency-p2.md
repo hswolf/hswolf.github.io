@@ -37,7 +37,7 @@ Vấn đề không phải ở số thread — mà ở chỗ tăng thread mà kh�
 
 ## Bức Tranh Toàn Cảnh
 
-Trước khi đi vào chi tiết, hãy nhìn tổng quan cách các thành phần phối hợp với nhau. Một Rails app trên production thường có 5 phần chính:
+Trước khi đi vào chi tiết, hãy nhìn tổng quan cách các thành phần phối hợp với nhau. Có 5 thành phần chính ảnh hưởng đến concurrency của một Rails app trên production:
 
 - **Nginx** — reverse proxy, đứng trước Puma để phân phối request
 - **Puma** — web server, nhận HTTP request từ Nginx và xử lý qua thread pool
@@ -385,3 +385,5 @@ WEB_CONCURRENCY=16  # 16 workers × ~300MB RAM = ~4.8GB chỉ cho Rails
 ---
 
 Concurrency không phải chủ đề chỉ dành cho senior. Càng hiểu sớm, bạn càng tránh được những đêm thức debug mà nguyên nhân chỉ là... một dòng config thiếu trong `puma.rb`.
+
+Nhưng tối ưu Puma, DB pool và Sidekiq chỉ giúp bạn **scale trên một server**. Khi traffic vượt quá khả năng của một máy, bạn cần nghĩ xa hơn — horizontal scaling với nhiều instance, container orchestration với Kubernetes, caching layer, CDN, và cách deploy Rails app để phục vụ user ở nhiều region trên toàn cầu. Đó là chủ đề của **Bài 3**.
