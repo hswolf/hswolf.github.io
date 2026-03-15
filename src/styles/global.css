@@ -163,6 +163,12 @@ img {
   height: auto;
 }
 
+.prose .mermaid {
+  text-align: center;
+  margin: var(--space-lg) 0;
+  overflow-x: auto;
+}
+
 
 .prose table {
   width: 100%;
