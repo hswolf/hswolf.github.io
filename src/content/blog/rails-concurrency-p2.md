@@ -27,7 +27,7 @@ Team quyết định tăng `RAILS_MAX_THREADS` lên 32 vì logic có vẻ đúng
 
 Vấn đề không phải ở số thread — mà ở chỗ tăng thread mà không hiểu thread pool, DB connection pool, và cách Puma thực sự hoạt động.
 
-Chúng ta hãy tìm hiểu các thành phần này và cách chúng tương tác với nhau qua bài viết này.
+*-> Chúng ta hãy cùng tìm hiểu các thành phần trên và cách chúng tương tác với nhau qua bài viết này.*
 
 > Nếu bạn chưa đọc [Bài 1](./rails-concurrency-p1) về Thread, Process và GVL — nên đọc trước để có nền tảng.
 
@@ -71,6 +71,19 @@ flowchart TD
     Redis -->|dequeue| Sidekiq[Sidekiq - 10 threads]
     Sidekiq -->|query DB| RDS
     Sidekiq -->|gửi email, webhook...| ExtAPI
+
+    style Browser fill:#f5f5f5,stroke:#999,color:#333
+    style Nginx fill:#6b7280,stroke:#4b5563,color:#fff
+    style Puma fill:#3b82f6,stroke:#2563eb,color:#fff
+    style T1 fill:#93c5fd,stroke:#3b82f6,color:#1e3a5f
+    style T2 fill:#93c5fd,stroke:#3b82f6,color:#1e3a5f
+    style T3 fill:#93c5fd,stroke:#3b82f6,color:#1e3a5f
+    style CP1 fill:#86efac,stroke:#22c55e,color:#14532d
+    style CP2 fill:#86efac,stroke:#22c55e,color:#14532d
+    style RDS fill:#22c55e,stroke:#16a34a,color:#fff
+    style Redis fill:#f87171,stroke:#ef4444,color:#fff
+    style Sidekiq fill:#a78bfa,stroke:#7c3aed,color:#fff
+    style ExtAPI fill:#fbbf24,stroke:#f59e0b,color:#78350f
 ```
 
 *Puma xử lý HTTP request qua thread pool, Sidekiq xử lý background job qua Redis queue — cả hai đều cần DB connection. Tổng connection = (workers × threads) + sidekiq_threads phải nằm trong giới hạn của DB instance.*
@@ -95,6 +108,16 @@ flowchart TD
 
     T1 --> DB[(Database Connection Pool)]
     T2 --> DB
+
+    style R1 fill:#f5f5f5,stroke:#999,color:#333
+    style R2 fill:#f5f5f5,stroke:#999,color:#333
+    style R3 fill:#fecaca,stroke:#f87171,color:#7f1d1d
+    style R4 fill:#fecaca,stroke:#f87171,color:#7f1d1d
+    style Q fill:#e0e7ff,stroke:#6366f1,color:#312e81
+    style P fill:#3b82f6,stroke:#2563eb,color:#fff
+    style T1 fill:#93c5fd,stroke:#3b82f6,color:#1e3a5f
+    style T2 fill:#93c5fd,stroke:#3b82f6,color:#1e3a5f
+    style DB fill:#86efac,stroke:#22c55e,color:#14532d
 ```
 
 *Chỉ có 2 thread trong pool — Request 3 và 4 phải chờ đến khi Thread 1 hoặc 2 xử lý xong và trả về pool. Đây là lý do config số thread quá ít tạo bottleneck ngay cả khi DB còn dư capacity.*
@@ -126,6 +149,17 @@ flowchart LR
         T3B[Thread 2]
         T3C[Thread 3]
     end
+
+    style LB fill:#6b7280,stroke:#4b5563,color:#fff
+    style T1A fill:#93c5fd,stroke:#3b82f6,color:#1e3a5f
+    style T1B fill:#93c5fd,stroke:#3b82f6,color:#1e3a5f
+    style T1C fill:#93c5fd,stroke:#3b82f6,color:#1e3a5f
+    style T2A fill:#93c5fd,stroke:#3b82f6,color:#1e3a5f
+    style T2B fill:#93c5fd,stroke:#3b82f6,color:#1e3a5f
+    style T2C fill:#93c5fd,stroke:#3b82f6,color:#1e3a5f
+    style T3A fill:#93c5fd,stroke:#3b82f6,color:#1e3a5f
+    style T3B fill:#93c5fd,stroke:#3b82f6,color:#1e3a5f
+    style T3C fill:#93c5fd,stroke:#3b82f6,color:#1e3a5f
 ```
 
 *Mỗi worker process là bản copy độc lập của app, fork từ master. Memory tăng tuyến tính theo số worker — không phải bug, mà là trade-off để bypass GVL và chạy song song thực sự trên nhiều CPU core.*
@@ -222,6 +256,15 @@ flowchart TD
 
     CP1 -->|tối đa 5 connections| RDS[(AWS RDS)]
     CP2 -->|tối đa 5 connections| RDS
+
+    style W1T1 fill:#93c5fd,stroke:#3b82f6,color:#1e3a5f
+    style W1T2 fill:#93c5fd,stroke:#3b82f6,color:#1e3a5f
+    style W1T3 fill:#93c5fd,stroke:#3b82f6,color:#1e3a5f
+    style W2T1 fill:#93c5fd,stroke:#3b82f6,color:#1e3a5f
+    style W2T2 fill:#93c5fd,stroke:#3b82f6,color:#1e3a5f
+    style CP1 fill:#86efac,stroke:#22c55e,color:#14532d
+    style CP2 fill:#86efac,stroke:#22c55e,color:#14532d
+    style RDS fill:#22c55e,stroke:#16a34a,color:#fff
 ```
 
 *Tổng DB connection = workers × pool_size. Với 2 workers × 5 threads = 10 connections. AWS RDS giới hạn connection theo instance size — `db.t3.micro` chỉ cho ~25 connections, `db.t3.medium` khoảng 60–80. Nếu horizontal scaling với nhiều app instance, con số này cộng dồn rất nhanh và là lý do thường gặp của `ConnectionTimeoutError` trên production.*
@@ -251,6 +294,14 @@ flowchart LR
         Sidekiq -->|5. Gửi email xác nhận| SMTP[Email Server]
         Sidekiq -->|6. Gọi webhook| ExtAPI[External API]
     end
+
+    style Browser fill:#f5f5f5,stroke:#999,color:#333
+    style Puma fill:#3b82f6,stroke:#2563eb,color:#fff
+    style DB fill:#22c55e,stroke:#16a34a,color:#fff
+    style Redis fill:#f87171,stroke:#ef4444,color:#fff
+    style Sidekiq fill:#a78bfa,stroke:#7c3aed,color:#fff
+    style SMTP fill:#fbbf24,stroke:#f59e0b,color:#78350f
+    style ExtAPI fill:#fbbf24,stroke:#f59e0b,color:#78350f
 ```
 
 *Puma trả response ngay sau khi enqueue job — user không phải chờ email được gửi. Sidekiq xử lý phần còn lại ở background hoàn toàn độc lập.*
