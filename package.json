@@ -6,7 +6,7 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "gen:images": "node scripts/generate-flashcard-images.mjs"
+    "gen:images": "node --env-file=.env scripts/generate-flashcard-images.mjs"
   },
   "repository": {
     "type": "git",

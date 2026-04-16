@@ -2,8 +2,8 @@
 //
 // Setup:
 //   1. Get a free API key: https://aistudio.google.com/app/apikey
-//   2. export GEMINI_API_KEY="..."
-//   3. npm run gen:images
+//   2. cp .env.example .env   # then paste your key into .env
+//   3. npm run gen:images     # loads .env via Node's --env-file
 //
 // The script:
 //   - Uses gemini-2.5-flash-image-preview
@@ -111,8 +111,10 @@ async function generateOne(client, id, concept) {
 async function main() {
   if (!process.env.GEMINI_API_KEY) {
     console.error("✗ GEMINI_API_KEY is not set.");
-    console.error("  Get one at https://aistudio.google.com/app/apikey then:");
-    console.error("  export GEMINI_API_KEY=\"...\"");
+    console.error("  1. Get a free key: https://aistudio.google.com/app/apikey");
+    console.error("  2. cp .env.example .env");
+    console.error("  3. Paste the key into .env (GEMINI_API_KEY=...)");
+    console.error("  4. npm run gen:images");
     process.exit(1);
   }
 
