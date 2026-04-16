@@ -9,6 +9,7 @@ const pathname = Astro.url.pathname;
       <a href="/blog" class:list={[{ active: pathname.startsWith('/blog') }]}>Blog</a>
       <a href="/life" class:list={[{ active: pathname.startsWith('/life') }]}>Life</a>
       <a href="/tho" class:list={[{ active: pathname.startsWith('/tho') }]}>Thơ</a>
+      <a href="/japanese/flashcards" class:list={[{ active: pathname.startsWith('/japanese') }]}>Nhật</a>
       <a href="/about" class:list={[{ active: pathname === '/about' || pathname === '/about/' }]}>About</a>
     </div>
   </nav>

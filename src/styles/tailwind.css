@@ -1,0 +1,15 @@
+@import "tailwindcss";
+
+@theme {
+  /* Remap Tailwind tokens to the site's zen earth-tone palette */
+  --color-bg: #F5F0EB;
+  --color-surface: #FDFBF9;
+  --color-ink: #3D2B1F;
+  --color-ink-muted: #6B5B4F;
+  --color-accent: #C4A35A;
+  --color-accent-soft: #E7D9B8;
+  --color-border: #D9D0C7;
+
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Cormorant Garamond", ui-serif, Georgia, serif;
+}

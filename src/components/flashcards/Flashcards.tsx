@@ -1,0 +1,142 @@
+import { useState } from "react";
+import { ChevronLeft, ChevronRight, Shuffle, RotateCw } from "lucide-react";
+import type { Deck } from "../../data/flashcards/n5-lesson12-c";
+
+type Props = {
+  deck: Deck;
+};
+
+export default function Flashcards({ deck }: Props) {
+  const [cards, setCards] = useState(deck.cards);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isFlipped, setIsFlipped] = useState(false);
+
+  if (cards.length === 0) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-bg text-ink-muted">
+        <p>Chưa có thẻ nào trong bộ này.</p>
+      </div>
+    );
+  }
+
+  const currentCard = cards[currentIndex];
+
+  const handleNext = () => {
+    setIsFlipped(false);
+    setTimeout(() => {
+      setCurrentIndex((prev) => (prev === cards.length - 1 ? 0 : prev + 1));
+    }, 150);
+  };
+
+  const handlePrev = () => {
+    setIsFlipped(false);
+    setTimeout(() => {
+      setCurrentIndex((prev) => (prev === 0 ? cards.length - 1 : prev - 1));
+    }, 150);
+  };
+
+  const handleFlip = () => {
+    setIsFlipped((v) => !v);
+  };
+
+  const handleShuffle = () => {
+    setIsFlipped(false);
+    setTimeout(() => {
+      const shuffled = [...cards].sort(() => Math.random() - 0.5);
+      setCards(shuffled);
+      setCurrentIndex(0);
+    }, 150);
+  };
+
+  return (
+    <div className="min-h-[80vh] flex flex-col items-center justify-center p-4 font-sans text-[color:var(--color-ink)]">
+      <div className="mb-8 text-center">
+        <h1 className="font-serif text-4xl font-semibold text-[color:var(--color-ink)] mb-2 tracking-tight">
+          {deck.title}
+        </h1>
+        <p className="text-[color:var(--color-ink-muted)] font-medium">
+          {deck.subtitle}
+        </p>
+      </div>
+
+      {/* Main flashcard */}
+      <div
+        className="w-full max-w-sm aspect-[3/4] bg-[color:var(--color-surface)] rounded-3xl shadow-lg border border-[color:var(--color-border)] flex flex-col items-center justify-center p-8 cursor-pointer relative transition-all duration-300 transform hover:scale-[1.02] active:scale-95"
+        onClick={handleFlip}
+        role="button"
+        tabIndex={0}
+        onKeyDown={(e) => {
+          if (e.key === " " || e.key === "Enter") {
+            e.preventDefault();
+            handleFlip();
+          }
+        }}
+        aria-label="Chạm để lật thẻ"
+      >
+        <div
+          className={`absolute top-4 right-4 transition-colors ${
+            isFlipped
+              ? "text-[color:var(--color-accent)]"
+              : "text-[color:var(--color-border)]"
+          }`}
+        >
+          <RotateCw size={20} />
+        </div>
+
+        {!isFlipped ? (
+          <div className="flex flex-col items-center justify-center text-center space-y-6">
+            <h2 className="font-serif text-5xl font-semibold text-[color:var(--color-ink)] tracking-wider leading-tight">
+              {currentCard.kanji}
+            </h2>
+            <p className="text-lg font-medium text-[color:var(--color-ink-muted)]">
+              Chạm để lật
+            </p>
+          </div>
+        ) : (
+          <div className="flex flex-col items-center justify-center text-center space-y-6">
+            {currentCard.kanji !== currentCard.hiragana && (
+              <p className="text-2xl font-medium text-[color:var(--color-accent)] mb-2">
+                {currentCard.hiragana}
+              </p>
+            )}
+            <h2 className="font-serif text-3xl font-semibold text-[color:var(--color-ink)] mb-4 px-4">
+              {currentCard.vietnamese}
+            </h2>
+          </div>
+        )}
+
+        <div className="absolute bottom-4 text-sm font-medium text-[color:var(--color-ink-muted)]">
+          {currentIndex + 1} / {cards.length}
+        </div>
+      </div>
+
+      {/* Controls */}
+      <div className="mt-10 flex items-center gap-6">
+        <button
+          onClick={handlePrev}
+          className="p-4 rounded-full bg-[color:var(--color-surface)] border border-[color:var(--color-border)] text-[color:var(--color-ink)] shadow-sm hover:shadow-md hover:text-[color:var(--color-accent)] transition-all active:scale-95"
+          aria-label="Thẻ trước"
+        >
+          <ChevronLeft size={28} />
+        </button>
+
+        <button
+          onClick={handleShuffle}
+          className="p-4 rounded-full bg-[color:var(--color-accent-soft)] text-[color:var(--color-ink)] shadow-sm hover:shadow-md transition-all active:scale-95"
+          title="Xáo trộn thẻ"
+          aria-label="Xáo trộn thẻ"
+        >
+          <Shuffle size={24} />
+        </button>
+
+        <button
+          onClick={handleNext}
+          className="p-4 rounded-full bg-[color:var(--color-surface)] border border-[color:var(--color-border)] text-[color:var(--color-ink)] shadow-sm hover:shadow-md hover:text-[color:var(--color-accent)] transition-all active:scale-95"
+          aria-label="Thẻ tiếp theo"
+        >
+          <ChevronRight size={28} />
+        </button>
+      </div>
+    </div>
+  );
+}
