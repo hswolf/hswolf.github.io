@@ -29,7 +29,7 @@ Vấn đề không phải ở số thread — mà ở chỗ tăng thread mà kh�
 
 *-> Chúng ta hãy cùng tìm hiểu các thành phần trên và cách chúng tương tác với nhau qua bài viết này.*
 
-> Nếu bạn chưa đọc [Bài 1](./rails-concurrency-p1) về Thread, Process và GVL — nên đọc trước để có nền tảng.
+> Nếu bạn chưa đọc [Bài 1](/blog/rails-concurrency-p1/) về Thread, Process và GVL — nên đọc trước để có nền tảng.
 
 > Các ví dụ về DB connection limit trong bài dùng **AWS RDS** làm tham chiếu. Nếu bạn dùng database khác (self-hosted Postgres, PlanetScale, Supabase...), concept vẫn giống — chỉ khác con số giới hạn cụ thể.
 

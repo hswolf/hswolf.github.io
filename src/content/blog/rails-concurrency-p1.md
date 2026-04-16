@@ -119,4 +119,4 @@ Nghe có vẻ tệ? Trên thực tế thì không — vì GVL tự động đư�
 
 Bây giờ bạn đã hiểu nền tảng: Ruby chọn threading vì GC dễ quản lý trên shared memory và web workload vốn I/O-bound. GVL tồn tại vì Ruby VM không thread-safe và cần bảo vệ C extensions — nhưng GVL không phải vấn đề với web app vì thread tự nhả lock khi chờ I/O.
 
-Câu hỏi tiếp theo là: **Puma tận dụng tất cả điều này như thế nào, và bạn nên config ra sao?** Đó là nội dung của [bài tiếp theo](./rails-concurrency-p2) — bao gồm thread pool, clustered mode, DB connection pool, và 4 pitfall phổ biến nhất khi config Puma sai.
+Câu hỏi tiếp theo là: **Puma tận dụng tất cả điều này như thế nào, và bạn nên config ra sao?** Đó là nội dung của [bài tiếp theo](/blog/rails-concurrency-p2/) — bao gồm thread pool, clustered mode, DB connection pool, và 4 pitfall phổ biến nhất khi config Puma sai.
