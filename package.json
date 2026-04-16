@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
-    "preview": "astro preview"
+    "preview": "astro preview",
+    "gen:images": "node scripts/generate-flashcard-images.mjs"
   },
   "repository": {
     "type": "git",
@@ -27,6 +28,7 @@
     "sharp": "^0.34.5"
   },
   "devDependencies": {
+    "@google/genai": "^1.50.1",
     "@tailwindcss/vite": "^4.2.2",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
