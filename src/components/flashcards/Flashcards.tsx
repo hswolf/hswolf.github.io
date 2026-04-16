@@ -84,7 +84,12 @@ export default function Flashcards({ deck }: Props) {
         </div>
 
         {!isFlipped ? (
-          <div className="flex flex-col items-center justify-center text-center space-y-6">
+          <div className="flex flex-col items-center justify-center text-center space-y-4">
+            {currentCard.kanji !== currentCard.hiragana && (
+              <p className="text-xl font-medium text-[color:var(--color-accent)]">
+                {currentCard.hiragana}
+              </p>
+            )}
             <h2 className="font-serif text-5xl font-semibold text-[color:var(--color-ink)] tracking-wider leading-tight">
               {currentCard.kanji}
             </h2>
