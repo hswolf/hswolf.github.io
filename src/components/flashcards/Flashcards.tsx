@@ -1,15 +1,46 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ChevronLeft, ChevronRight, Shuffle, RotateCw } from "lucide-react";
-import type { Deck } from "../../data/flashcards/n5-lesson12-c";
+import type { Deck, FlashCard } from "../../data/flashcards/n5-lesson12-c";
 
 type Props = {
   deck: Deck;
 };
 
+type SafeImageProps = {
+  src: string;
+  onFail: () => void;
+};
+
+function SafeImage({ src, onFail }: SafeImageProps) {
+  const ref = useRef<HTMLImageElement | null>(null);
+
+  useEffect(() => {
+    const img = ref.current;
+    if (!img) return;
+    // If the image already finished loading before React attached the handler
+    // and came back empty, report failure now.
+    if (img.complete && img.naturalWidth === 0) {
+      onFail();
+    }
+  }, [src, onFail]);
+
+  return (
+    <img
+      ref={ref}
+      src={src}
+      alt=""
+      loading="lazy"
+      onError={onFail}
+      className="w-40 h-40 object-contain rounded-2xl"
+    />
+  );
+}
+
 export default function Flashcards({ deck }: Props) {
   const [cards, setCards] = useState(deck.cards);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isFlipped, setIsFlipped] = useState(false);
+  const [failedImages, setFailedImages] = useState<Set<number>>(new Set());
 
   if (cards.length === 0) {
     return (
@@ -84,7 +115,21 @@ export default function Flashcards({ deck }: Props) {
         </div>
 
         {!isFlipped ? (
-          <div className="flex flex-col items-center justify-center text-center space-y-4">
+          <div className="flex flex-col items-center justify-center text-center space-y-4 w-full">
+            {currentCard.image && !failedImages.has(currentCard.id) && (
+              <SafeImage
+                key={currentCard.id}
+                src={`/images/flashcards/${deck.slug}/${currentCard.image}`}
+                onFail={() =>
+                  setFailedImages((prev) => {
+                    if (prev.has(currentCard.id)) return prev;
+                    const next = new Set(prev);
+                    next.add(currentCard.id);
+                    return next;
+                  })
+                }
+              />
+            )}
             {currentCard.kanji !== currentCard.hiragana && (
               <p className="text-xl font-medium text-[color:var(--color-accent)]">
                 {currentCard.hiragana}
@@ -93,7 +138,7 @@ export default function Flashcards({ deck }: Props) {
             <h2 className="font-serif text-5xl font-semibold text-[color:var(--color-ink)] tracking-wider leading-tight">
               {currentCard.kanji}
             </h2>
-            <p className="text-lg font-medium text-[color:var(--color-ink-muted)]">
+            <p className="text-sm font-medium text-[color:var(--color-ink-muted)]">
               Chạm để lật
             </p>
           </div>
