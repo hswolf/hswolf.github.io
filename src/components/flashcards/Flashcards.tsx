@@ -163,6 +163,7 @@ export default function Flashcards({ deck }: Props) {
       {/* Controls */}
       <div className="mt-12 md:mt-10 flex items-center gap-5 md:gap-6 [@media(max-height:640px)]:mt-6">
         <button
+          type="button"
           onClick={handlePrev}
           className="w-14 h-14 inline-flex items-center justify-center rounded-full bg-[color:var(--color-surface)] border border-[color:var(--color-border)] text-[color:var(--color-ink)] shadow-sm hover:shadow-md hover:text-[color:var(--color-accent)] transition-all active:scale-95"
           aria-label="Thẻ trước"
@@ -171,6 +172,7 @@ export default function Flashcards({ deck }: Props) {
         </button>
 
         <button
+          type="button"
           onClick={handleShuffle}
           className="w-12 h-12 inline-flex items-center justify-center rounded-full bg-[color:var(--color-accent-soft)] text-[color:var(--color-ink)] shadow-sm hover:shadow-md transition-all active:scale-95"
           title="Xáo trộn thẻ"
@@ -180,6 +182,7 @@ export default function Flashcards({ deck }: Props) {
         </button>
 
         <button
+          type="button"
           onClick={handleNext}
           className="w-14 h-14 inline-flex items-center justify-center rounded-full bg-[color:var(--color-surface)] border border-[color:var(--color-border)] text-[color:var(--color-ink)] shadow-sm hover:shadow-md hover:text-[color:var(--color-accent)] transition-all active:scale-95"
           aria-label="Thẻ tiếp theo"
