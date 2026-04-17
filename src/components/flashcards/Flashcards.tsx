@@ -169,7 +169,15 @@ export default function Flashcards({ deck }: Props) {
           </p>
         </div>
 
-        <div className="w-full max-w-sm bg-[color:var(--color-surface)] rounded-3xl shadow-lg border border-[color:var(--color-border)] flex flex-col items-center justify-center p-10 text-center">
+        <p className="mb-4 text-xs font-medium text-[color:var(--color-ink-muted)]">
+          {memorizedCount} đã thuộc · {notMemorizedCount} chưa thuộc · {unseenCount} chưa xem
+        </p>
+
+        <div
+          role="status"
+          aria-live="polite"
+          className="w-full max-w-sm bg-[color:var(--color-surface)] rounded-3xl shadow-lg border border-[color:var(--color-border)] flex flex-col items-center justify-center p-10 text-center"
+        >
           <p className="text-5xl mb-4" aria-hidden="true">🎉</p>
           <h2 className="font-serif text-2xl md:text-3xl font-semibold text-[color:var(--color-ink)] mb-2">
             Bạn đã thuộc hết {cards.length} từ!
@@ -186,10 +194,6 @@ export default function Flashcards({ deck }: Props) {
             Bắt đầu lại
           </button>
         </div>
-
-        <p className="mt-4 md:mt-3 text-xs font-medium text-[color:var(--color-ink-muted)]">
-          {cards.length} đã thuộc · 0 chưa thuộc · 0 chưa xem
-        </p>
       </div>
     );
   }
