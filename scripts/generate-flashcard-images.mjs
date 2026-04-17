@@ -1,18 +1,25 @@
-// Generate flashcard images with Google Gemini (Nano Banana).
+// Generate flashcard images via a free AI provider.
 //
-// Setup:
-//   1. Get a free API key: https://aistudio.google.com/app/apikey
-//   2. cp .env.example .env   # then paste your key into .env
-//   3. npm run gen:images     # loads .env via Node's --env-file
+// Providers (pick via PROVIDER env var; default: pollinations):
+//   - pollinations : https://pollinations.ai  (no key, truly free, unlimited-ish)
+//   - hf           : Hugging Face Inference Providers (needs HF_TOKEN, free monthly credits)
+//
+// Setup (Pollinations – zero config):
+//   npm run gen:images
+//
+// Setup (Hugging Face – better quality when credits available):
+//   1. Get a free token: https://huggingface.co/settings/tokens
+//   2. In .env: HF_TOKEN=hf_...
+//   3. PROVIDER=hf npm run gen:images
 //
 // The script:
-//   - Uses gemini-2.5-flash-image-preview
-//   - Generates 39 zen-style illustrations, one per N5 Bài 12 Phần C card
-//   - Converts PNG -> WebP with sharp (smaller, same filename convention)
+//   - Generates one zen-style illustration per N5 Bài 12 Phần C card
+//   - Converts to WebP with sharp
 //   - Skips cards whose image already exists (safe to re-run / resume)
+//   - Retries transient errors with backoff
 //   - Prints a summary at the end
 
-import { GoogleGenAI } from "@google/genai";
+import { InferenceClient } from "@huggingface/inference";
 import sharp from "sharp";
 import { existsSync, mkdirSync, writeFileSync } from "node:fs";
 import { join, dirname } from "node:path";
@@ -20,21 +27,25 @@ import { fileURLToPath } from "node:url";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const OUT_DIR = join(__dirname, "..", "public", "images", "flashcards", "n5-lesson12-c");
-const MODEL = process.env.GEMINI_IMAGE_MODEL || "gemini-2.5-flash-image-preview";
-const DELAY_MS = Number(process.env.GEMINI_DELAY_MS || 1500);
+const PROVIDER = (process.env.PROVIDER || "pollinations").toLowerCase();
+const HF_MODEL = process.env.HF_IMAGE_MODEL || "black-forest-labs/FLUX.1-schnell";
+const POLLINATIONS_MODEL = process.env.POLLINATIONS_MODEL || "flux";
+const DELAY_MS = Number(
+  process.env.GEN_DELAY_MS || (PROVIDER === "pollinations" ? 4000 : 1500)
+);
+const MAX_RETRIES = 3;
 
 const STYLE = [
   "Soft minimalist flat illustration.",
-  "Warm cream/beige background (#F5F0EB).",
-  "Muted earth-tone palette: warm browns, soft gold (#C4A35A), sage green.",
+  "Warm cream beige background color #F5F0EB.",
+  "Muted earth-tone palette: warm browns, soft gold #C4A35A, sage green.",
   "Gentle shadows, zen aesthetic, hand-drawn feel.",
-  "Absolutely no text, no letters, no kanji, no numbers in the image.",
+  "No text, no letters, no kanji, no numbers visible in the image.",
   "Square composition, centered subject, generous whitespace.",
   "Clean vector-style artwork, suitable as a flashcard thumbnail.",
 ].join(" ");
 
-// id -> concept description (English, short, unambiguous).
-// Tweak freely; re-run only regenerates missing ids.
+// id -> concept description. Re-run only regenerates missing ids.
 const PROMPTS = {
   1: "two young brothers standing side by side, casual, warm and friendly",
   2: "a single young adult sitting calmly alone at a small wooden table with a cup of tea",
@@ -59,7 +70,7 @@ const PROMPTS = {
   21: "a wooden door gently closing shut, motion indicated by soft lines",
   22: "a small cozy cottage-style house with soft smoke curling from the chimney, surrounded by trees",
   23: "a warm yellow light bulb turning on above a thoughtful person's head (idea moment)",
-  24: "a single flower bud in the act of opening into a fresh bloom, step-by-step suggestion",
+  24: "a single flower bud in the act of opening into a fresh bloom",
   25: "a single person standing upright, arms relaxed at their sides, calm posture",
   26: "a traditional spinning top mid-rotation, slight motion blur at the edges",
   27: "a silhouette figure stepping out through a doorway into warm daylight",
@@ -77,50 +88,113 @@ const PROMPTS = {
   39: "a tired office worker politely bowing at the end of the workday, soft lighting",
 };
 
-async function generateOne(client, id, concept) {
-  const prompt = `${STYLE}\n\nSubject: ${concept}`;
+function sleep(ms) {
+  return new Promise((r) => setTimeout(r, ms));
+}
 
-  const response = await client.models.generateContent({
-    model: MODEL,
-    contents: prompt,
+async function fetchHuggingFace(prompt, ctx) {
+  const blob = await ctx.client.textToImage({
+    model: HF_MODEL,
+    inputs: prompt,
+    parameters: {
+      width: 1024,
+      height: 1024,
+      num_inference_steps: 4, // FLUX.1-schnell is tuned for 4 steps
+    },
   });
+  return Buffer.from(await blob.arrayBuffer());
+}
 
-  const parts = response?.candidates?.[0]?.content?.parts ?? [];
-  const imagePart = parts.find(
-    (p) => p.inlineData && p.inlineData.mimeType?.startsWith("image/")
-  );
-
-  if (!imagePart) {
-    const textPart = parts.find((p) => p.text);
-    throw new Error(
-      `No image returned for id=${id}. Response text: ${textPart?.text ?? "(none)"}`
-    );
+async function fetchPollinations(prompt, _ctx, id) {
+  // Pollinations: GET https://image.pollinations.ai/prompt/<encoded>?...
+  // Returns binary image directly. No API key. FLUX-family models.
+  const url =
+    `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}` +
+    `?width=1024&height=1024&model=${encodeURIComponent(POLLINATIONS_MODEL)}` +
+    `&nologo=true&seed=${id * 17 + 101}`;
+  const res = await fetch(url, {
+    // Pollinations can take 20–60s on cold path; give it room.
+    signal: AbortSignal.timeout(120_000),
+  });
+  if (!res.ok) {
+    throw new Error(`Pollinations ${res.status}: ${(await res.text()).slice(0, 200)}`);
   }
+  const contentType = res.headers.get("content-type") || "";
+  if (!contentType.startsWith("image/")) {
+    throw new Error(`Pollinations returned ${contentType}`);
+  }
+  return Buffer.from(await res.arrayBuffer());
+}
 
-  const pngBuffer = Buffer.from(imagePart.inlineData.data, "base64");
-  const webpBuffer = await sharp(pngBuffer)
-    .resize({ width: 1024, height: 1024, fit: "cover" })
-    .webp({ quality: 82 })
-    .toBuffer();
+const PROVIDERS = {
+  hf: fetchHuggingFace,
+  pollinations: fetchPollinations,
+};
 
-  const outPath = join(OUT_DIR, `${id}.webp`);
-  writeFileSync(outPath, webpBuffer);
-  return { id, bytes: webpBuffer.length, outPath };
+async function generateOne(id, concept, ctx) {
+  const prompt = `${STYLE} Subject: ${concept}.`;
+  const fetcher = PROVIDERS[ctx.provider];
+  if (!fetcher) throw new Error(`Unknown PROVIDER=${ctx.provider}`);
+
+  let lastErr;
+  for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
+    try {
+      const rawBuf = await fetcher(prompt, ctx, id);
+      const webp = await sharp(rawBuf)
+        .resize({ width: 1024, height: 1024, fit: "cover" })
+        .webp({ quality: 82 })
+        .toBuffer();
+      const outPath = join(OUT_DIR, `${id}.webp`);
+      writeFileSync(outPath, webp);
+      return { bytes: webp.length, outPath };
+    } catch (err) {
+      lastErr = err;
+      const msg = String(err?.message || err);
+      const transient =
+        msg.includes("503") ||
+        msg.includes("429") ||
+        msg.includes("502") ||
+        msg.includes("504") ||
+        msg.includes("loading") ||
+        msg.includes("timeout") ||
+        msg.includes("timed out") ||
+        msg.includes("fetch failed");
+
+      if (transient && attempt < MAX_RETRIES) {
+        const backoff = 3000 * attempt;
+        process.stdout.write(` (retry ${attempt} in ${backoff / 1000}s)`);
+        await sleep(backoff);
+        continue;
+      }
+      throw err;
+    }
+  }
+  throw lastErr ?? new Error("exhausted retries");
 }
 
 async function main() {
-  if (!process.env.GEMINI_API_KEY) {
-    console.error("✗ GEMINI_API_KEY is not set.");
-    console.error("  1. Get a free key: https://aistudio.google.com/app/apikey");
-    console.error("  2. cp .env.example .env");
-    console.error("  3. Paste the key into .env (GEMINI_API_KEY=...)");
-    console.error("  4. npm run gen:images");
+  if (!PROVIDERS[PROVIDER]) {
+    console.error(`✗ Unknown PROVIDER="${PROVIDER}". Valid: ${Object.keys(PROVIDERS).join(", ")}`);
     process.exit(1);
   }
 
-  if (!existsSync(OUT_DIR)) mkdirSync(OUT_DIR, { recursive: true });
+  const ctx = { provider: PROVIDER };
 
-  const client = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+  if (PROVIDER === "hf") {
+    const token = process.env.HF_TOKEN || process.env.HUGGINGFACE_TOKEN;
+    if (!token) {
+      console.error("✗ HF_TOKEN is not set.");
+      console.error("  1. Get a free token: https://huggingface.co/settings/tokens");
+      console.error("  2. In .env: HF_TOKEN=hf_...");
+      console.error("  3. PROVIDER=hf npm run gen:images");
+      console.error("");
+      console.error("  (or drop PROVIDER entirely to use Pollinations, which needs no key.)");
+      process.exit(1);
+    }
+    ctx.client = new InferenceClient(token);
+  }
+
+  if (!existsSync(OUT_DIR)) mkdirSync(OUT_DIR, { recursive: true });
 
   const ids = Object.keys(PROMPTS).map(Number).sort((a, b) => a - b);
   const todo = ids.filter((id) => !existsSync(join(OUT_DIR, `${id}.webp`)));
@@ -130,22 +204,23 @@ async function main() {
     return;
   }
 
-  console.log(`Generating ${todo.length} image(s) with ${MODEL} …`);
+  const label = PROVIDER === "hf" ? `Hugging Face / ${HF_MODEL}` : `Pollinations / ${POLLINATIONS_MODEL}`;
+  console.log(`Generating ${todo.length} image(s) with ${label} …`);
   console.log(`(delay between requests: ${DELAY_MS}ms)\n`);
 
   const results = { ok: [], fail: [] };
 
   for (const id of todo) {
-    process.stdout.write(`  [${String(id).padStart(2)}] ${PROMPTS[id].slice(0, 48)}… `);
+    process.stdout.write(`  [${String(id).padStart(2)}] ${PROMPTS[id].slice(0, 48).padEnd(48)}`);
     try {
-      const res = await generateOne(client, id, PROMPTS[id]);
-      console.log(`✓ ${(res.bytes / 1024).toFixed(0)}KB`);
+      const res = await generateOne(id, PROMPTS[id], ctx);
+      console.log(` ✓ ${(res.bytes / 1024).toFixed(0)}KB`);
       results.ok.push(id);
     } catch (err) {
-      console.log(`✗ ${err.message}`);
+      console.log(` ✗ ${err.message}`);
       results.fail.push({ id, error: err.message });
     }
-    if (id !== todo[todo.length - 1]) await new Promise((r) => setTimeout(r, DELAY_MS));
+    if (id !== todo[todo.length - 1]) await sleep(DELAY_MS);
   }
 
   console.log("");
