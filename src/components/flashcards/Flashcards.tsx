@@ -155,13 +155,15 @@ export default function Flashcards({ deck }: Props) {
           </div>
         )}
 
-        <div className="absolute bottom-4 text-sm font-medium text-[color:var(--color-ink-muted)]">
-          {currentIndex + 1} / {cards.length}
-        </div>
       </div>
 
+      {/* Card counter */}
+      <p className="mt-4 md:mt-3 text-xs font-medium text-[color:var(--color-ink-muted)] [@media(max-height:640px)]:mt-2">
+        {currentIndex + 1} / {cards.length}
+      </p>
+
       {/* Controls */}
-      <div className="mt-12 md:mt-10 flex items-center gap-5 md:gap-6 [@media(max-height:640px)]:mt-6">
+      <div className="mt-4 md:mt-3 flex items-center gap-5 md:gap-6 [@media(max-height:640px)]:mt-2">
         <button
           type="button"
           onClick={handlePrev}
