@@ -244,6 +244,13 @@ export default function Flashcards({ deck }: Props) {
         }}
         aria-label="Chạm để lật thẻ"
       >
+        {statuses[currentCard.id] === "not_memorized" && !isFlipped && (
+          <span
+            className="absolute top-4 left-4 inline-block w-2 h-2 rounded-full bg-[color:var(--color-accent)]"
+            aria-label="Chưa thuộc"
+            title="Chưa thuộc"
+          />
+        )}
         <div
           className={`absolute top-4 right-4 transition-colors ${
             isFlipped
