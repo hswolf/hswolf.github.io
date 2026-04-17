@@ -80,7 +80,7 @@ export default function Flashcards({ deck }: Props) {
   };
 
   return (
-    <div className="min-h-[80vh] flex flex-col items-center justify-center p-4 pb-[max(env(safe-area-inset-bottom),1rem)] font-sans text-[color:var(--color-ink)]">
+    <div className="min-h-[80vh] flex flex-col items-center justify-center pt-4 px-4 pb-[max(env(safe-area-inset-bottom),1rem)] font-sans text-[color:var(--color-ink)]">
       <div className="mb-6 md:mb-8 text-center">
         <h1 className="font-serif text-2xl md:text-4xl font-semibold text-[color:var(--color-ink)] mb-1 md:mb-2 tracking-tight">
           {deck.title}
