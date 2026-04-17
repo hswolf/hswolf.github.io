@@ -59,6 +59,7 @@ function readSession(deckSlug: string): Record<number, CardStatus> {
       !parsed ||
       parsed.version !== SESSION_VERSION ||
       parsed.deckSlug !== deckSlug ||
+      parsed.statuses === null ||
       typeof parsed.statuses !== "object"
     ) {
       return {};
