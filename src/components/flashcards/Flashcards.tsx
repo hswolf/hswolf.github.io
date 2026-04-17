@@ -158,12 +158,12 @@ export default function Flashcards({ deck }: Props) {
       </div>
 
       {/* Card counter */}
-      <p className="mt-4 md:mt-3 text-xs font-medium text-[color:var(--color-ink-muted)] [@media(max-height:640px)]:mt-2">
+      <p className="mt-4 md:mt-3 text-center text-xs font-medium text-[color:var(--color-ink-muted)] [@media(max-height:640px)]:mt-2">
         {currentIndex + 1} / {cards.length}
       </p>
 
       {/* Controls */}
-      <div className="mt-4 md:mt-3 flex items-center gap-5 md:gap-6 [@media(max-height:640px)]:mt-2">
+      <div className="mt-4 md:mt-3 flex items-center gap-5 md:gap-6 [@media(max-height:640px)]:mt-0">
         <button
           type="button"
           onClick={handlePrev}
