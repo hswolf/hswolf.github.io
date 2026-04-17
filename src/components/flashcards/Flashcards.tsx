@@ -181,6 +181,34 @@ export default function Flashcards({ deck }: Props) {
     }, 150);
   };
 
+  const handleMark = (status: CardStatus) => {
+    if (!currentCard) return;
+    const cardId = currentCard.id;
+    setStatus(cardId, status);
+
+    setIsFlipped(false);
+    setTimeout(() => {
+      // Recompute pool as it would be AFTER this mark, then pick the next
+      // logical position. Marking memorized shrinks the pool, so the cleanest
+      // "next" is to stay at the same pool index (the card at that slot is
+      // now the one that used to come after), wrapping if we were at the end.
+      const nextStatuses = { ...statuses, [cardId]: status };
+      const nextPool = cards.filter((c) => nextStatuses[c.id] !== "memorized");
+      if (nextPool.length === 0) {
+        setPoolIndex(0);
+        return;
+      }
+      if (status === "memorized") {
+        // Current card leaves the pool → same index now points at the card
+        // that was formerly at poolIndex + 1 (or wraps to 0 at the end).
+        setPoolIndex(safePoolIndex % nextPool.length);
+      } else {
+        // Card stays in the pool → advance like Next.
+        setPoolIndex((prev) => (prev + 1) % nextPool.length);
+      }
+    }, 150);
+  };
+
   return (
     <div className="min-h-[80vh] flex flex-col items-center justify-center pt-4 px-4 pb-[max(env(safe-area-inset-bottom),1rem)] font-sans text-[color:var(--color-ink)]">
       <div className="mb-6 md:mb-8 text-center">
@@ -245,15 +273,40 @@ export default function Flashcards({ deck }: Props) {
             </p>
           </div>
         ) : (
-          <div className="flex flex-col items-center justify-center text-center space-y-6">
+          <div className="flex flex-col items-center justify-center text-center space-y-6 w-full">
             {currentCard.kanji !== currentCard.hiragana && (
               <p className="text-2xl font-medium text-[color:var(--color-accent)] mb-2">
                 {currentCard.hiragana}
               </p>
             )}
-            <h2 className="font-serif text-3xl font-semibold text-[color:var(--color-ink)] mb-4 px-4">
+            <h2 className="font-serif text-3xl font-semibold text-[color:var(--color-ink)] mb-2 px-4">
               {currentCard.vietnamese}
             </h2>
+            <div className="mt-2 flex flex-wrap items-center justify-center gap-4">
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleMark("not_memorized");
+                }}
+                className="px-4 h-11 inline-flex items-center justify-center gap-2 rounded-full bg-[color:var(--color-surface)] border border-[color:var(--color-border)] text-[color:var(--color-ink)] text-sm font-medium shadow-sm hover:shadow-md hover:text-[color:var(--color-accent)] transition-transform duration-150 ease-out active:scale-95 touch-manipulation focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--color-accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--color-bg)]"
+                aria-label="Chưa thuộc từ này"
+              >
+                <RotateCw size={16} />
+                Chưa thuộc
+              </button>
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleMark("memorized");
+                }}
+                className="px-4 h-11 inline-flex items-center justify-center rounded-full bg-[color:var(--color-accent-soft)] text-[color:var(--color-ink)] text-sm font-semibold shadow-sm hover:shadow-md transition-transform duration-150 ease-out active:scale-95 touch-manipulation focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--color-accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--color-bg)]"
+                aria-label="Đã thuộc từ này"
+              >
+                Đã thuộc
+              </button>
+            </div>
           </div>
         )}
 
