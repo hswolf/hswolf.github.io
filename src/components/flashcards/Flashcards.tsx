@@ -129,7 +129,8 @@ export default function Flashcards({ deck }: Props) {
     (c) => statuses[c.id] !== "memorized"
   );
   const poolSize = activePool.length;
-  const safePoolIndex = poolSize === 0 ? 0 : Math.min(poolIndex, poolSize - 1);
+  const safePoolIndex =
+    poolSize === 0 ? 0 : Math.max(0, Math.min(poolIndex, poolSize - 1));
   const currentCard = poolSize === 0 ? null : activePool[safePoolIndex];
 
   if (cards.length === 0) {
