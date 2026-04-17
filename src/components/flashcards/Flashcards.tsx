@@ -339,7 +339,7 @@ export default function Flashcards({ deck }: Props) {
             setPoolIndex(0);
             setIsFlipped(false);
           }}
-          className="underline decoration-dotted underline-offset-2 hover:text-[color:var(--color-accent)] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--color-accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--color-bg)] rounded"
+          className="-my-1 px-2 py-1 underline decoration-dotted underline-offset-2 hover:text-[color:var(--color-accent)] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--color-accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--color-bg)] rounded"
           aria-label="Reset trạng thái học phiên này"
         >
           Reset
