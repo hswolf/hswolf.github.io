@@ -36,6 +36,85 @@ function SafeImage({ src, onFail }: SafeImageProps) {
   );
 }
 
+// --- Persistence: per-deck card-status map in sessionStorage -------------------
+
+type CardStatus = "unseen" | "memorized" | "not_memorized";
+
+type SessionState = {
+  deckSlug: string;
+  version: 1;
+  statuses: Record<number, CardStatus>;
+};
+
+const SESSION_KEY_PREFIX = "flashcards:session:";
+const SESSION_VERSION = 1;
+
+function readSession(deckSlug: string): Record<number, CardStatus> {
+  if (typeof window === "undefined") return {};
+  try {
+    const raw = window.sessionStorage.getItem(SESSION_KEY_PREFIX + deckSlug);
+    if (!raw) return {};
+    const parsed = JSON.parse(raw) as SessionState;
+    if (
+      !parsed ||
+      parsed.version !== SESSION_VERSION ||
+      parsed.deckSlug !== deckSlug ||
+      typeof parsed.statuses !== "object"
+    ) {
+      return {};
+    }
+    return parsed.statuses;
+  } catch {
+    // Private-mode Safari or corrupted JSON — fall back to in-memory.
+    return {};
+  }
+}
+
+function writeSession(deckSlug: string, statuses: Record<number, CardStatus>) {
+  if (typeof window === "undefined") return;
+  try {
+    const payload: SessionState = {
+      deckSlug,
+      version: SESSION_VERSION,
+      statuses,
+    };
+    window.sessionStorage.setItem(
+      SESSION_KEY_PREFIX + deckSlug,
+      JSON.stringify(payload)
+    );
+  } catch {
+    // Storage unavailable or quota exceeded — keep in-memory only.
+  }
+}
+
+function useSessionStatuses(deckSlug: string) {
+  // First render (including SSR) has an empty map; real state hydrates in the effect below.
+  const [statuses, setStatuses] = useState<Record<number, CardStatus>>({});
+  const [hydrated, setHydrated] = useState(false);
+
+  useEffect(() => {
+    setStatuses(readSession(deckSlug));
+    setHydrated(true);
+  }, [deckSlug]);
+
+  useEffect(() => {
+    if (!hydrated) return;
+    writeSession(deckSlug, statuses);
+  }, [deckSlug, statuses, hydrated]);
+
+  const setStatus = (cardId: number, status: CardStatus) => {
+    setStatuses((prev) => ({ ...prev, [cardId]: status }));
+  };
+
+  const resetStatuses = () => {
+    setStatuses({});
+  };
+
+  return { statuses, setStatus, resetStatuses, hydrated };
+}
+
+// ----------------------------------------------------------------------------
+
 export default function Flashcards({ deck }: Props) {
   const [cards, setCards] = useState(deck.cards);
   const [currentIndex, setCurrentIndex] = useState(0);
