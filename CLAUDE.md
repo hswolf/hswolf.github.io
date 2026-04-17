@@ -45,7 +45,7 @@ React island (`src/components/flashcards/Flashcards.tsx`) rendered via Astro pag
 **Adding or editing a deck:** see [`.claude/skills/adding-flashcard-deck/SKILL.md`](.claude/skills/adding-flashcard-deck/SKILL.md) — covers deck data shape, image folder conventions, the two image-generation providers (Pollinations default / Hugging Face opt-in), mobile polish invariants, and the extension path for multiple decks.
 
 Key files:
-- `src/components/flashcards/Flashcards.tsx` — React component (flip, next/prev, shuffle, counter, safe-area / focus-ring / touch-manipulation polish)
+- `src/components/flashcards/Flashcards.tsx` — React component. Flip, prev/next/shuffle, per-card status (`unseen` / `memorized` / `not_memorized`), `Chưa thuộc` / `Đã thuộc` mark buttons on the back, progress caption + Reset, dot indicator on front for not-memorized cards, Done screen when all cards are memorized. State persists per tab in `sessionStorage: flashcards:session:<deck.slug>` (survives refresh, wipes on tab close, falls back to in-memory on private-mode Safari). Mobile polish: safe-area padding, focus-visible ring, touch-manipulation, viewport-scaled spacing.
 - `src/data/flashcards/<deck-slug>.ts` — deck data (typed `Deck` with cards: id, kanji, hiragana, vietnamese, image)
 - `src/pages/japanese/flashcards.astro` — Astro wrapper that mounts the island
 - `src/styles/tailwind.css` — Tailwind v4 entry with `@theme` remapping to the zen palette

@@ -7,7 +7,7 @@ description: Use when adding a new Japanese vocabulary flashcard deck to this re
 
 ## Overview
 
-The flashcard experience lives at `/japanese/flashcards` and is powered by a React island (`src/components/flashcards/Flashcards.tsx`) hydrated on an Astro page. A "deck" is a typed TS file plus a folder of images. Current repo ships one deck (`n5-lesson12-c`). This skill covers how to add another, edit an existing one, or touch the supporting machinery without breaking the mobile polish that already landed.
+The flashcard experience lives at `/japanese/flashcards` and is powered by a React island (`src/components/flashcards/Flashcards.tsx`) hydrated on an Astro page. A "deck" is a typed TS file plus a folder of images. Current repo ships one deck (`n5-lesson12-c`). This skill covers how to add another, edit an existing one, or touch the supporting machinery without breaking the mobile polish and review-mode state machinery that already landed.
 
 ## Quick reference
 
@@ -22,7 +22,8 @@ The flashcard experience lives at `/japanese/flashcards` and is powered by a Rea
 | Image-generation script (Pollinations or HF) | `scripts/generate-flashcard-images.mjs` |
 | Env for HF provider | `.env` (copy from `.env.example`) |
 | Nav entry pointing at the deck | `src/components/Header.astro` (`Nhật` link) |
-| Mobile polish spec + plan (reference) | `docs/superpowers/specs/` and `docs/superpowers/plans/` |
+| Per-tab review state (memorized / not-memorized flags) | `window.sessionStorage` key `flashcards:session:<deck.slug>` |
+| Specs + plans (reference) | `docs/superpowers/specs/` + `docs/superpowers/plans/` — notably `2026-04-17-flashcards-mobile-polish-design.md` and `2026-04-17-flashcards-review-mode-design.md` |
 
 ## When to use
 
@@ -122,24 +123,40 @@ The React island accepts a single prop:
 <Flashcards deck={myDeck} client:load />
 ```
 
-Front render (per card):
-- Optional image (160px square, `SafeImage` with graceful 404 fallback)
-- Hiragana line (accent color, serif), suppressed if kanji === hiragana
+### Card states
+
+Every card has a `CardStatus`: `"unseen" | "memorized" | "not_memorized"`. Fresh session = all `unseen`. The **active pool** is `unseen + not_memorized` — memorized cards retire from navigation. Status is persisted per-tab in `sessionStorage` under `flashcards:session:<deck.slug>` via the local `useSessionStatuses` hook; state survives refresh, wipes on tab close, falls back to in-memory on private-mode Safari.
+
+### Front render (per card)
+
+- Optional image (160 px square, `SafeImage` with graceful 404 fallback)
+- Small accent-gold dot at top-left when the current card is `not_memorized` (purely visual; the parent card's `aria-label` carries the status string for AT)
+- Hiragana line (accent color, serif), suppressed if `kanji === hiragana`
 - Kanji (large, Cormorant Garamond, 5xl)
 - "Chạm để lật" hint (muted)
 
-Back render:
+### Back render (per card)
+
 - Hiragana (larger, accent), same suppression rule
 - Vietnamese meaning (serif, 3xl)
+- Two mark buttons side-by-side: **Chưa thuộc** (muted surface, Repeat icon — NOT `RotateCw`, which is reserved for the flip indicator) and **Đã thuộc** (accent-soft surface)
+- Each mark button **must** call `e.stopPropagation()` in its `onClick` — the card wrapper has its own `onClick={handleFlip}`, so a bare click would both mark AND re-flip the card, producing an incoherent state
 
-Controls row:
+### Controls row
+
 - Prev 56×56 (ChevronLeft 24) — secondary surface
 - Shuffle 48×48 (Shuffle 20) — accent-soft surface
 - Next 56×56 (ChevronRight 24) — secondary surface
 - All three: `type="button"`, `touch-manipulation`, `focus-visible` zen-accent ring, `transition-transform duration-150 ease-out active:scale-95`
-- Counter `<p>` sits between card and controls, not inside the card
+- Counter `<p>` reads **`N / pool-size`**, not `N / deck-size`. As the user marks cards memorized, `M` shrinks — that's intentional progress visibility.
+- Progress caption below the counter reads `X đã thuộc · Y chưa thuộc · Z chưa xem` with an inline **Reset** (underlined, dotted) that wipes sessionStorage and returns every card to `unseen`
 
-Mobile polish the component already handles:
+### Done screen
+
+When the pool reaches zero (user marked every card memorized), the component early-returns a celebratory panel instead of rendering the card — 🎉 + "Bạn đã thuộc hết N từ!" + "Bắt đầu lại" button. Marked with `role="status" aria-live="polite"` for screen-reader announce. The Done screen's own header/progress caption reuses the same JSX structure as the main return; if you edit one, consider whether the other needs the same change.
+
+### Mobile polish the component already handles
+
 - Heading shrinks (`text-2xl → md:text-4xl`) on < 768 px
 - Card-to-controls gap scales per viewport: 48 px mobile, 40 px desktop, 24 px when viewport height ≤ 640 px
 - Safe-area bottom padding on iOS (`pb-[max(env(safe-area-inset-bottom),1rem)]`)
@@ -158,6 +175,12 @@ Mobile polish the component already handles:
 | Running `npm run gen:images` and seeing 429s mid-run | HF free tier runs out mid-batch. Switch to default Pollinations (`npm run gen:images`) to backfill the remaining cards. Mixed provider output is visible but close enough. |
 | Forgetting `text-center` on a new caption `<p>` | Intrinsic-width centering only works for short content. Always include `text-center` on captions so future text changes don't misalign. |
 | Animating everything with `transition-all` on buttons | We deliberately use `transition-transform duration-150 ease-out` to avoid animating box-shadow and keep tap feel snappy. Keep it narrow. |
+| New button on the card back without `e.stopPropagation()` | The card wrapper is a `role="button"` with `onClick={handleFlip}`. Any click on a child `<button>` bubbles up and re-flips the card. Every interactive element on the back needs `e.stopPropagation()` in its handler. |
+| Using `RotateCw` for anything but the flip indicator | The top-right `RotateCw` icon signals flip state. Reusing it elsewhere (e.g. as a "comes back" glyph) creates visual ambiguity. Use `Repeat` for repetition semantics and pick something clearly distinct for other concepts. |
+| Indexing into the full `cards` array by `currentIndex` | There is no `currentIndex` — navigation is pool-based (`poolIndex` into `activePool`). Reading `cards[poolIndex]` after any cards are memorized will return the wrong card. Always derive `currentCard` via `activePool[safePoolIndex]`. |
+| Computing "done" from `memorizedCount === cards.length` | Use the existing `!currentCard` guard (which tests `poolSize === 0`). That way stale sessionStorage entries with IDs no longer in the deck still route to the Done screen correctly. |
+| Renaming a deck's `slug` without migrating sessionStorage | The session key is `flashcards:session:<deck.slug>`. Changing the slug orphans the old key — users who had progress silently start from scratch. If you must rename, prefer keeping the old slug and changing the display title/subtitle instead. |
+| Changing the shape of `SessionState` without bumping `SESSION_VERSION` | `readSession` rejects payloads whose `version !== SESSION_VERSION` and returns `{}`. If you change the schema (e.g. add per-card timestamps for spaced repetition), bump the constant so existing tabs don't try to use incompatible shapes. |
 
 ## Extending to multiple decks
 
@@ -169,7 +192,9 @@ When a second deck lands and you want both reachable:
 4. Update the generation script to iterate over a list of deck slugs rather than a hardcoded `OUT_DIR`.
 5. Consider moving `PROMPTS` out of the script into each deck's data file as a `cards[i].prompt` field.
 
-This refactor is **not** done yet — the current shape is optimised for one deck.
+**Session persistence already handles multiple decks.** The `useSessionStatuses` hook keys sessionStorage by `deck.slug`, so switching decks loads each one's own memorized/not-memorized state and they never collide. No refactor needed there.
+
+This page/script refactor is **not** done yet — the current shape is optimised for one deck.
 
 ## Red flags — stop and reconsider
 
@@ -178,3 +203,5 @@ This refactor is **not** done yet — the current shape is optimised for one dec
 - **"I'll add `p-4 pb-8` to fix spacing on mobile"** → No. Prefer pairing `pt-4 px-4 pb-[...]` so automatic class sorters can't silently break safe-area handling.
 - **"I don't need `type="button"` because it's not in a form today"** → Add it anyway. It's a one-attribute guard against future surprise submit behavior.
 - **"I'll just change the heading size globally"** → That also changes blog/life/poetry pages. Heading scale on `/japanese/flashcards` is component-local via Tailwind utilities, not global CSS.
+- **"I'll switch sessionStorage to localStorage so progress sticks forever"** → Deliberate design choice. Spec §1 chose session-scoped. If you want cross-session persistence, brainstorm it first — it changes the UX (stale flags hang around across days; need a manual reset affordance that's more prominent than the inline `Reset`). Don't flip storage layers silently.
+- **"I'll compute the active pool with `useMemo`"** → `cards.filter(...)` runs on every render for a 39-card deck; the cost is ~µs. The spec explicitly keeps it unmemoized for clarity. Don't add memoization without a profile-backed reason.
