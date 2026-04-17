@@ -118,9 +118,19 @@ function useSessionStatuses(deckSlug: string) {
 
 export default function Flashcards({ deck }: Props) {
   const [cards, setCards] = useState(deck.cards);
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const [poolIndex, setPoolIndex] = useState(0);
   const [isFlipped, setIsFlipped] = useState(false);
   const [failedImages, setFailedImages] = useState<Set<number>>(new Set());
+  const { statuses, setStatus, resetStatuses } = useSessionStatuses(deck.slug);
+
+  // Active pool = cards that are either unseen or explicitly flagged as
+  // not-memorized. Memorized cards retire from navigation entirely.
+  const activePool = cards.filter(
+    (c) => statuses[c.id] !== "memorized"
+  );
+  const poolSize = activePool.length;
+  const safePoolIndex = poolSize === 0 ? 0 : Math.min(poolIndex, poolSize - 1);
+  const currentCard = poolSize === 0 ? null : activePool[safePoolIndex];
 
   if (cards.length === 0) {
     return (
@@ -130,19 +140,30 @@ export default function Flashcards({ deck }: Props) {
     );
   }
 
-  const currentCard = cards[currentIndex];
+  if (!currentCard) {
+    // Active pool is empty — user has marked every card memorized.
+    // Task 7 replaces this with a proper Done screen; for now, render a placeholder
+    // so the component doesn't crash.
+    return (
+      <div className="min-h-[80vh] flex items-center justify-center text-[color:var(--color-ink-muted)]">
+        <p>Bạn đã thuộc hết rồi. Reset ở task sau.</p>
+      </div>
+    );
+  }
 
   const handleNext = () => {
+    if (poolSize <= 1) return;
     setIsFlipped(false);
     setTimeout(() => {
-      setCurrentIndex((prev) => (prev === cards.length - 1 ? 0 : prev + 1));
+      setPoolIndex((prev) => (prev + 1) % poolSize);
     }, 150);
   };
 
   const handlePrev = () => {
+    if (poolSize <= 1) return;
     setIsFlipped(false);
     setTimeout(() => {
-      setCurrentIndex((prev) => (prev === 0 ? cards.length - 1 : prev - 1));
+      setPoolIndex((prev) => (prev - 1 + poolSize) % poolSize);
     }, 150);
   };
 
@@ -155,7 +176,7 @@ export default function Flashcards({ deck }: Props) {
     setTimeout(() => {
       const shuffled = [...cards].sort(() => Math.random() - 0.5);
       setCards(shuffled);
-      setCurrentIndex(0);
+      setPoolIndex(0);
     }, 150);
   };
 
@@ -239,7 +260,7 @@ export default function Flashcards({ deck }: Props) {
 
       {/* Card counter */}
       <p className="mt-4 md:mt-3 text-center text-xs font-medium text-[color:var(--color-ink-muted)] [@media(max-height:640px)]:mt-2">
-        {currentIndex + 1} / {cards.length}
+        {safePoolIndex + 1} / {poolSize}
       </p>
 
       {/* Controls */}
