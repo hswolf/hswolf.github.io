@@ -2,24 +2,29 @@
 
 ## Overview
 
-Personal blog at `vinh.to`, built with Astro, deployed to GitHub Pages via `hswolf.github.io` repo.
+Personal blog at `vinh.to`, built with Astro, deployed to GitHub Pages via `hswolf.github.io` repo. Also hosts interactive learning tools (Japanese flashcards) as React islands on specific routes.
 
 ## Commands
 
 ```bash
-npm run dev      # Dev server at localhost:4321
-npm run build    # Build to dist/
-npm run preview  # Preview built site
+npm run dev           # Dev server at localhost:4321
+npm run build         # Build to dist/
+npm run preview       # Preview built site
+npm run gen:images    # Generate flashcard images (default: Pollinations, no key)
+npm run gen:images:hf # Generate via Hugging Face (requires HF_TOKEN in .env)
 ```
 
 ## Architecture
 
 - **Astro 5** static site generator with MDX, sitemap, RSS integrations
-- **Pure CSS** - no framework, CSS custom properties in `src/styles/global.css`
+- **React 19** via `@astrojs/react` — used as islands on routes that need interactivity (currently only `/japanese/flashcards`)
+- **Styling:**
+  - **Pure CSS + CSS custom properties** for the content site (blog/life/poetry/about). Design tokens in `src/styles/global.css`.
+  - **Tailwind v4** (via `@tailwindcss/vite`) **page-scoped** to interactive pages — imported only where needed, e.g. `src/styles/tailwind.css` is imported by `src/pages/japanese/flashcards.astro` and nothing else. Does **not** leak into content pages.
 - **GitHub Pages** deployment via `.github/workflows/deploy.yml` (withastro/action)
 - **Custom domain** `vinh.to` via `public/CNAME`
 
-## Content
+## Content collections
 
 Three collections defined in `src/content.config.ts`:
 
@@ -31,6 +36,23 @@ Three collections defined in `src/content.config.ts`:
 
 Shared frontmatter: `title`, `description`, `pubDate`, `tags`, `lang` (vi/en), `draft`, `heroImage`, `updatedDate`
 
+## Interactive islands
+
+### Japanese flashcards — `/japanese/flashcards`
+
+React island (`src/components/flashcards/Flashcards.tsx`) rendered via Astro page wrapper with `client:load`. Uses Tailwind v4 (page-scoped) and the zen palette. Currently ships one deck (N5 Bài 12 - Phần C, 39 cards); architected so more decks can be added.
+
+**Adding or editing a deck:** see [`.claude/skills/adding-flashcard-deck/SKILL.md`](.claude/skills/adding-flashcard-deck/SKILL.md) — covers deck data shape, image folder conventions, the two image-generation providers (Pollinations default / Hugging Face opt-in), mobile polish invariants, and the extension path for multiple decks.
+
+Key files:
+- `src/components/flashcards/Flashcards.tsx` — React component (flip, next/prev, shuffle, counter, safe-area / focus-ring / touch-manipulation polish)
+- `src/data/flashcards/<deck-slug>.ts` — deck data (typed `Deck` with cards: id, kanji, hiragana, vietnamese, image)
+- `src/pages/japanese/flashcards.astro` — Astro wrapper that mounts the island
+- `src/styles/tailwind.css` — Tailwind v4 entry with `@theme` remapping to the zen palette
+- `public/images/flashcards/<deck-slug>/` — per-card WebP images + a README with per-card prompt hints
+- `scripts/generate-flashcard-images.mjs` — unified batch image generation; `PROVIDER=pollinations` (default) or `PROVIDER=hf`
+- `.env.example` → `.env` for `HF_TOKEN` (git-ignored)
+
 ## Design
 
 - Minimalist zen aesthetic, **light mode only**
@@ -39,19 +61,38 @@ Shared frontmatter: `title`, `description`, `pubDate`, `tags`, `lang` (vi/en), `
 - Max content width: `42rem`
 - Fluid typography with `clamp()`
 
-## Key Files
+The zen tokens are duplicated in two places because the site is split between pure-CSS (content) and Tailwind (islands):
+- `src/styles/global.css` — CSS custom properties used by `.astro` and `.md(x)` content
+- `src/styles/tailwind.css` — `@theme` tokens that mirror the same colors/fonts for Tailwind utilities on interactive pages
 
-- `astro.config.mjs` - Site config, integrations, Shiki theme
-- `src/content.config.ts` - Collection schemas (Zod)
-- `src/styles/global.css` - Design tokens, base styles, `.prose` styles
-- `src/layouts/BaseLayout.astro` - Root HTML shell
-- `src/layouts/PostLayout.astro` - Individual post layout
-- `src/components/BaseHead.astro` - SEO meta, OG tags, fonts
-- `src/pages/rss.xml.ts` - RSS feed (all collections)
+Keep the two in sync when tweaking tokens.
+
+## Key files
+
+- `astro.config.mjs` — Site config, integrations (`@astrojs/mdx`, `@astrojs/sitemap`, `@astrojs/react`), Shiki theme, Tailwind Vite plugin
+- `src/content.config.ts` — Collection schemas (Zod)
+- `src/styles/global.css` — Design tokens, base styles, `.prose` styles
+- `src/styles/tailwind.css` — Tailwind v4 entry + zen `@theme` (page-scoped import only)
+- `src/layouts/BaseLayout.astro` — Root HTML shell (shared across content and island pages)
+- `src/layouts/PostLayout.astro` — Individual post layout
+- `src/components/BaseHead.astro` — SEO meta, OG tags, fonts
+- `src/components/Header.astro` — Site nav (includes `Nhật` link for the flashcards)
+- `src/components/flashcards/Flashcards.tsx` — React flashcard island
+- `src/data/flashcards/` — deck data files
+- `public/images/flashcards/` — per-deck image assets
+- `scripts/generate-flashcard-images.mjs` — batch image generator (multi-provider)
+- `src/pages/rss.xml.ts` — RSS feed (all collections)
+- `docs/superpowers/specs/` and `docs/superpowers/plans/` — design + implementation documents for major features (e.g. mobile polish)
 
 ## Conventions
 
 - Blog posts: Vietnamese by default (`lang: "vi"`), set `lang: "en"` for English
-- Images stored in `public/images/` (posts/, about/)
+- Content images stored in `public/images/` (posts/, about/); flashcard images under `public/images/flashcards/<deck-slug>/`
 - Tags link to `/tags/[tag]`
 - Poetry pages use centered text with serif font and generous line spacing
+- **Relative markdown links across posts** (`./other-post`) resolve differently on Astro dev vs GitHub Pages (trailing slash). Always use absolute paths (`/blog/<slug>/`) for cross-post links.
+- Commit style: lowercase conventional prefix (`feat:`, `style:`, `fix:`, `refactor:`, `chore:`, `docs:`); include a `Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>` trailer on agent-authored commits.
+
+## Project-local skills
+
+- [`adding-flashcard-deck`](.claude/skills/adding-flashcard-deck/SKILL.md) — add or edit Japanese vocabulary flashcard decks; covers deck data shape, image generation, and component contract.
