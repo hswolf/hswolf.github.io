@@ -164,27 +164,27 @@ export default function Flashcards({ deck }: Props) {
       <div className="mt-10 flex items-center gap-6">
         <button
           onClick={handlePrev}
-          className="p-4 rounded-full bg-[color:var(--color-surface)] border border-[color:var(--color-border)] text-[color:var(--color-ink)] shadow-sm hover:shadow-md hover:text-[color:var(--color-accent)] transition-all active:scale-95"
+          className="w-14 h-14 inline-flex items-center justify-center rounded-full bg-[color:var(--color-surface)] border border-[color:var(--color-border)] text-[color:var(--color-ink)] shadow-sm hover:shadow-md hover:text-[color:var(--color-accent)] transition-all active:scale-95"
           aria-label="Thẻ trước"
         >
-          <ChevronLeft size={28} />
+          <ChevronLeft size={24} />
         </button>
 
         <button
           onClick={handleShuffle}
-          className="p-4 rounded-full bg-[color:var(--color-accent-soft)] text-[color:var(--color-ink)] shadow-sm hover:shadow-md transition-all active:scale-95"
+          className="w-12 h-12 inline-flex items-center justify-center rounded-full bg-[color:var(--color-accent-soft)] text-[color:var(--color-ink)] shadow-sm hover:shadow-md transition-all active:scale-95"
           title="Xáo trộn thẻ"
           aria-label="Xáo trộn thẻ"
         >
-          <Shuffle size={24} />
+          <Shuffle size={20} />
         </button>
 
         <button
           onClick={handleNext}
-          className="p-4 rounded-full bg-[color:var(--color-surface)] border border-[color:var(--color-border)] text-[color:var(--color-ink)] shadow-sm hover:shadow-md hover:text-[color:var(--color-accent)] transition-all active:scale-95"
+          className="w-14 h-14 inline-flex items-center justify-center rounded-full bg-[color:var(--color-surface)] border border-[color:var(--color-border)] text-[color:var(--color-ink)] shadow-sm hover:shadow-md hover:text-[color:var(--color-accent)] transition-all active:scale-95"
           aria-label="Thẻ tiếp theo"
         >
-          <ChevronRight size={28} />
+          <ChevronRight size={24} />
         </button>
       </div>
     </div>
