@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { ChevronLeft, ChevronRight, Shuffle, RotateCw } from "lucide-react";
+import { ChevronLeft, ChevronRight, Repeat, RotateCw, Shuffle } from "lucide-react";
 import type { Deck, FlashCard } from "../../data/flashcards/n5-lesson12-c";
 
 type Props = {
@@ -292,7 +292,7 @@ export default function Flashcards({ deck }: Props) {
                 className="px-4 h-11 inline-flex items-center justify-center gap-2 rounded-full bg-[color:var(--color-surface)] border border-[color:var(--color-border)] text-[color:var(--color-ink)] text-sm font-medium shadow-sm hover:shadow-md hover:text-[color:var(--color-accent)] transition-transform duration-150 ease-out active:scale-95 touch-manipulation focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--color-accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--color-bg)]"
                 aria-label="Chưa thuộc từ này"
               >
-                <RotateCw size={16} />
+                <Repeat size={16} />
                 Chưa thuộc
               </button>
               <button
