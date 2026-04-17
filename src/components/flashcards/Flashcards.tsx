@@ -161,7 +161,7 @@ export default function Flashcards({ deck }: Props) {
       </div>
 
       {/* Controls */}
-      <div className="mt-10 flex items-center gap-6">
+      <div className="mt-12 md:mt-10 flex items-center gap-5 md:gap-6 [@media(max-height:640px)]:mt-6">
         <button
           onClick={handlePrev}
           className="w-14 h-14 inline-flex items-center justify-center rounded-full bg-[color:var(--color-surface)] border border-[color:var(--color-border)] text-[color:var(--color-ink)] shadow-sm hover:shadow-md hover:text-[color:var(--color-accent)] transition-all active:scale-95"
