@@ -152,12 +152,44 @@ export default function Flashcards({ deck }: Props) {
   }
 
   if (!currentCard) {
-    // Active pool is empty — user has marked every card memorized.
-    // Task 7 replaces this with a proper Done screen; for now, render a placeholder
-    // so the component doesn't crash.
+    const handleRestart = () => {
+      resetStatuses();
+      setPoolIndex(0);
+      setIsFlipped(false);
+    };
+
     return (
-      <div className="min-h-[80vh] flex items-center justify-center text-[color:var(--color-ink-muted)]">
-        <p>Bạn đã thuộc hết rồi. Reset ở task sau.</p>
+      <div className="min-h-[80vh] flex flex-col items-center justify-center pt-4 px-4 pb-[max(env(safe-area-inset-bottom),1rem)] font-sans text-[color:var(--color-ink)]">
+        <div className="mb-6 md:mb-8 text-center">
+          <h1 className="font-serif text-2xl md:text-4xl font-semibold text-[color:var(--color-ink)] mb-1 md:mb-2 tracking-tight">
+            {deck.title}
+          </h1>
+          <p className="text-sm md:text-base text-[color:var(--color-ink-muted)] font-medium">
+            {deck.subtitle}
+          </p>
+        </div>
+
+        <div className="w-full max-w-sm bg-[color:var(--color-surface)] rounded-3xl shadow-lg border border-[color:var(--color-border)] flex flex-col items-center justify-center p-10 text-center">
+          <p className="text-5xl mb-4" aria-hidden="true">🎉</p>
+          <h2 className="font-serif text-2xl md:text-3xl font-semibold text-[color:var(--color-ink)] mb-2">
+            Bạn đã thuộc hết {cards.length} từ!
+          </h2>
+          <p className="text-sm text-[color:var(--color-ink-muted)] mb-6">
+            Làm tốt lắm. Reset để học lại từ đầu?
+          </p>
+          <button
+            type="button"
+            onClick={handleRestart}
+            className="px-6 h-12 inline-flex items-center justify-center rounded-full bg-[color:var(--color-accent-soft)] text-[color:var(--color-ink)] text-base font-semibold shadow-sm hover:shadow-md transition-transform duration-150 ease-out active:scale-95 touch-manipulation focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--color-accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--color-bg)]"
+            aria-label="Bắt đầu lại từ đầu"
+          >
+            Bắt đầu lại
+          </button>
+        </div>
+
+        <p className="mt-4 md:mt-3 text-xs font-medium text-[color:var(--color-ink-muted)]">
+          {cards.length} đã thuộc · 0 chưa thuộc · 0 chưa xem
+        </p>
       </div>
     );
   }
