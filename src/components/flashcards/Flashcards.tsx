@@ -133,6 +133,16 @@ export default function Flashcards({ deck }: Props) {
     poolSize === 0 ? 0 : Math.max(0, Math.min(poolIndex, poolSize - 1));
   const currentCard = poolSize === 0 ? null : activePool[safePoolIndex];
 
+  // Per-status counts for the progress caption.
+  let memorizedCount = 0;
+  let notMemorizedCount = 0;
+  for (const c of cards) {
+    const s = statuses[c.id];
+    if (s === "memorized") memorizedCount++;
+    else if (s === "not_memorized") notMemorizedCount++;
+  }
+  const unseenCount = cards.length - memorizedCount - notMemorizedCount;
+
   if (cards.length === 0) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-bg text-ink-muted">
@@ -316,6 +326,25 @@ export default function Flashcards({ deck }: Props) {
       <p className="mt-4 md:mt-3 text-center text-xs font-medium text-[color:var(--color-ink-muted)] [@media(max-height:640px)]:mt-2">
         {safePoolIndex + 1} / {poolSize}
       </p>
+
+      {/* Progress + reset */}
+      <div className="mt-2 flex items-center justify-center gap-3 text-xs font-medium text-[color:var(--color-ink-muted)] [@media(max-height:640px)]:mt-1">
+        <span>
+          {memorizedCount} đã thuộc · {notMemorizedCount} chưa thuộc · {unseenCount} chưa xem
+        </span>
+        <button
+          type="button"
+          onClick={() => {
+            resetStatuses();
+            setPoolIndex(0);
+            setIsFlipped(false);
+          }}
+          className="underline decoration-dotted underline-offset-2 hover:text-[color:var(--color-accent)] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--color-accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--color-bg)] rounded"
+          aria-label="Reset trạng thái học phiên này"
+        >
+          Reset
+        </button>
+      </div>
 
       {/* Controls */}
       <div className="mt-4 md:mt-3 flex items-center gap-5 md:gap-6 [@media(max-height:640px)]:mt-0">
