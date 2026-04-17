@@ -81,11 +81,11 @@ export default function Flashcards({ deck }: Props) {
 
   return (
     <div className="min-h-[80vh] flex flex-col items-center justify-center p-4 font-sans text-[color:var(--color-ink)]">
-      <div className="mb-8 text-center">
-        <h1 className="font-serif text-4xl font-semibold text-[color:var(--color-ink)] mb-2 tracking-tight">
+      <div className="mb-6 md:mb-8 text-center">
+        <h1 className="font-serif text-2xl md:text-4xl font-semibold text-[color:var(--color-ink)] mb-1 md:mb-2 tracking-tight">
           {deck.title}
         </h1>
-        <p className="text-[color:var(--color-ink-muted)] font-medium">
+        <p className="text-sm md:text-base text-[color:var(--color-ink-muted)] font-medium">
           {deck.subtitle}
         </p>
       </div>
