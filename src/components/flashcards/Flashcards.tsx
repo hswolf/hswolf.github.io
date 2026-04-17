@@ -242,13 +242,16 @@ export default function Flashcards({ deck }: Props) {
             handleFlip();
           }
         }}
-        aria-label="Chạm để lật thẻ"
+        aria-label={
+          statuses[currentCard.id] === "not_memorized" && !isFlipped
+            ? "Chưa thuộc — chạm để lật thẻ"
+            : "Chạm để lật thẻ"
+        }
       >
         {statuses[currentCard.id] === "not_memorized" && !isFlipped && (
           <span
+            aria-hidden="true"
             className="absolute top-4 left-4 inline-block w-2 h-2 rounded-full bg-[color:var(--color-accent)]"
-            aria-label="Chưa thuộc"
-            title="Chưa thuộc"
           />
         )}
         <div
