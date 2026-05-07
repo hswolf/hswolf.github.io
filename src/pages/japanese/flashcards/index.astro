@@ -1,0 +1,92 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import { decks } from "../../../data/flashcards";
+---
+
+<BaseLayout
+  title="Flashcards Tiếng Nhật | vinh.to"
+  description="Flashcards học từ vựng tiếng Nhật N5 — chọn bộ thẻ để bắt đầu."
+>
+  <section class="flashcards-index">
+    <header class="intro">
+      <h1>Flashcards Tiếng Nhật</h1>
+      <p>Chọn bộ thẻ để bắt đầu học.</p>
+    </header>
+    <ul class="deck-list">
+      {decks.map((deck) => (
+        <li>
+          <a href={`/japanese/flashcards/${deck.slug}/`} class="deck-card">
+            <h2>{deck.title}</h2>
+            <p class="subtitle">{deck.subtitle}</p>
+            <span class="meta">{deck.cards.length} thẻ</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </section>
+</BaseLayout>
+
+<style>
+  .flashcards-index {
+    max-width: var(--max-width-content);
+    margin: 0 auto;
+  }
+
+  .intro {
+    text-align: center;
+    margin-bottom: var(--space-xl);
+  }
+
+  .intro h1 {
+    font-size: var(--text-2xl);
+    margin-bottom: var(--space-sm);
+  }
+
+  .intro p {
+    color: var(--color-text-muted);
+  }
+
+  .deck-list {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: var(--space-md);
+  }
+
+  .deck-card {
+    display: block;
+    padding: var(--space-lg);
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    color: var(--color-text);
+    text-decoration: none;
+    transition: border-color 0.2s ease, transform 0.2s ease;
+  }
+
+  .deck-card:hover {
+    border-color: var(--color-accent);
+    transform: translateY(-2px);
+    color: var(--color-text);
+  }
+
+  .deck-card h2 {
+    font-size: var(--text-lg);
+    margin-bottom: var(--space-xs);
+    color: var(--color-text);
+  }
+
+  .deck-card .subtitle {
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-sm);
+    font-size: var(--text-sm);
+  }
+
+  .deck-card .meta {
+    display: inline-block;
+    font-size: var(--text-sm);
+    color: var(--color-accent);
+    font-weight: 500;
+    letter-spacing: 0.02em;
+  }
+</style>

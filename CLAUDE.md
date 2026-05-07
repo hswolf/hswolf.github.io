@@ -10,17 +10,18 @@ Personal blog at `vinh.to`, built with Astro, deployed to GitHub Pages via `hswo
 npm run dev           # Dev server at localhost:4321
 npm run build         # Build to dist/
 npm run preview       # Preview built site
-npm run gen:images    # Generate flashcard images (default: Pollinations, no key)
+npm run gen:images    # Generate flashcard images (default: Pollinations, no key, deck=n5-lesson12-c)
 npm run gen:images:hf # Generate via Hugging Face (requires HF_TOKEN in .env)
+DECK=n5-lesson15-1 npm run gen:images   # Generate images for a specific deck
 ```
 
 ## Architecture
 
 - **Astro 5** static site generator with MDX, sitemap, RSS integrations
-- **React 19** via `@astrojs/react` — used as islands on routes that need interactivity (currently only `/japanese/flashcards`)
+- **React 19** via `@astrojs/react` — used as islands on routes that need interactivity (currently only the per-deck flashcard pages under `/japanese/flashcards/<slug>`)
 - **Styling:**
-  - **Pure CSS + CSS custom properties** for the content site (blog/life/poetry/about). Design tokens in `src/styles/global.css`.
-  - **Tailwind v4** (via `@tailwindcss/vite`) **page-scoped** to interactive pages — imported only where needed, e.g. `src/styles/tailwind.css` is imported by `src/pages/japanese/flashcards.astro` and nothing else. Does **not** leak into content pages.
+  - **Pure CSS + CSS custom properties** for the content site (blog/life/poetry/about) and the flashcard index. Design tokens in `src/styles/global.css`.
+  - **Tailwind v4** (via `@tailwindcss/vite`) **page-scoped** to interactive pages — imported only where needed, e.g. `src/styles/tailwind.css` is imported by `src/pages/japanese/flashcards/[deck].astro` and nothing else. Does **not** leak into content pages.
 - **GitHub Pages** deployment via `.github/workflows/deploy.yml` (withastro/action)
 - **Custom domain** `vinh.to` via `public/CNAME`
 
@@ -40,17 +41,29 @@ Shared frontmatter: `title`, `description`, `pubDate`, `tags`, `lang` (vi/en), `
 
 ### Japanese flashcards — `/japanese/flashcards`
 
-React island (`src/components/flashcards/Flashcards.tsx`) rendered via Astro page wrapper with `client:load`. Uses Tailwind v4 (page-scoped) and the zen palette. Currently ships one deck (N5 Bài 12 - Phần C, 39 cards); architected so more decks can be added.
+React island (`src/components/flashcards/Flashcards.tsx`) rendered via per-deck Astro page wrapper with `client:load`. Uses Tailwind v4 (page-scoped) and the zen palette.
 
-**Adding or editing a deck:** see [`.claude/skills/adding-flashcard-deck/SKILL.md`](.claude/skills/adding-flashcard-deck/SKILL.md) — covers deck data shape, image folder conventions, the two image-generation providers (Pollinations default / Hugging Face opt-in), mobile polish invariants, and the extension path for multiple decks.
+Routing:
+- `/japanese/flashcards` — deck index (pure Astro, no React, no Tailwind). Lists all decks from the registry and links into them.
+- `/japanese/flashcards/<slug>` — individual deck (Astro wrapper + React island + Tailwind). Generated statically via `getStaticPaths()` from the registry.
+
+Decks currently in the registry (`src/data/flashcards/index.ts`):
+- `n5-lesson12-c` — N5 Bài 12 - Phần C (39 cards, fully imaged)
+- `n5-lesson15-1` — N5 Bài 15 - Phần 1 (21 cards, no images yet)
+- `n5-lesson15-6` — N5 Bài 15 - Phần 6 (25 cards, no images yet)
+
+**Adding or editing a deck:** see [`.claude/skills/adding-flashcard-deck/SKILL.md`](.claude/skills/adding-flashcard-deck/SKILL.md) — covers deck data shape, image folder conventions, the two image-generation providers (Pollinations default / Hugging Face opt-in), mobile polish invariants, and the multi-deck routing.
 
 Key files:
 - `src/components/flashcards/Flashcards.tsx` — React component. Flip, prev/next/shuffle, per-card status (`unseen` / `memorized` / `not_memorized`), `Chưa thuộc` / `Đã thuộc` mark buttons on the back, progress caption + Reset, dot indicator on front for not-memorized cards, Done screen when all cards are memorized. State persists per tab in `sessionStorage: flashcards:session:<deck.slug>` (survives refresh, wipes on tab close, falls back to in-memory on private-mode Safari). Mobile polish: safe-area padding, focus-visible ring, touch-manipulation, viewport-scaled spacing.
-- `src/data/flashcards/<deck-slug>.ts` — deck data (typed `Deck` with cards: id, kanji, hiragana, vietnamese, image)
-- `src/pages/japanese/flashcards.astro` — Astro wrapper that mounts the island
-- `src/styles/tailwind.css` — Tailwind v4 entry with `@theme` remapping to the zen palette
-- `public/images/flashcards/<deck-slug>/` — per-card WebP images + a README with per-card prompt hints
-- `scripts/generate-flashcard-images.mjs` — unified batch image generation; `PROVIDER=pollinations` (default) or `PROVIDER=hf`
+- `src/data/flashcards/types.ts` — shared `Deck` and `FlashCard` types.
+- `src/data/flashcards/index.ts` — deck registry (`decks` array, `getDeckBySlug` helper, type re-exports).
+- `src/data/flashcards/<deck-slug>.ts` — deck data (one file per deck).
+- `src/pages/japanese/flashcards/index.astro` — deck index landing page.
+- `src/pages/japanese/flashcards/[deck].astro` — Astro wrapper that mounts the island, one static page per slug.
+- `src/styles/tailwind.css` — Tailwind v4 entry with `@theme` remapping to the zen palette (imported only by `[deck].astro`).
+- `public/images/flashcards/<deck-slug>/` — per-card WebP images + a README with per-card prompt hints.
+- `scripts/generate-flashcard-images.mjs` — unified batch image generation. Pick provider with `PROVIDER=pollinations` (default) or `PROVIDER=hf`; pick deck with `DECK=<slug>` (default `n5-lesson12-c`).
 - `.env.example` → `.env` for `HF_TOKEN` (git-ignored)
 
 ## Design

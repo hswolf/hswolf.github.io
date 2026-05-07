@@ -1,0 +1,22 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import Flashcards from "../../../components/flashcards/Flashcards.tsx";
+import { decks } from "../../../data/flashcards";
+import "../../../styles/tailwind.css";
+
+export async function getStaticPaths() {
+  return decks.map((deck) => ({
+    params: { deck: deck.slug },
+    props: { deck },
+  }));
+}
+
+const { deck } = Astro.props;
+---
+
+<BaseLayout
+  title={`${deck.title} — ${deck.subtitle} | vinh.to`}
+  description={`Flashcard học từ vựng tiếng Nhật N5 — ${deck.subtitle}.`}
+>
+  <Flashcards deck={deck} client:load />
+</BaseLayout>

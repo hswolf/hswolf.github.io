@@ -1,0 +1,30 @@
+import type { Deck } from "./types";
+
+export const n5Lesson15Part1: Deck = {
+  slug: "n5-lesson15-1",
+  title: "Flashcard Sơ Cấp N5",
+  subtitle: "Từ vựng Bài 15 - Phần 1",
+  cards: [
+    { id: 1, kanji: "本物", hiragana: "ほんもの", vietnamese: "hàng thật, đồ thật", image: "1.webp" },
+    { id: 2, kanji: "彼", hiragana: "かれ", vietnamese: "anh ấy, ông ấy...", image: "2.webp" },
+    { id: 3, kanji: "台風", hiragana: "たいふう", vietnamese: "cơn bão", image: "3.webp" },
+    { id: 4, kanji: "洗濯物", hiragana: "せんたくもの", vietnamese: "đồ bẩn cần giặt / đồ đã giặt", image: "4.webp" },
+    { id: 5, kanji: "遊園地", hiragana: "ゆうえんち", vietnamese: "khu giải trí", image: "5.webp" },
+    { id: 6, kanji: "ハイキング", hiragana: "ハイキング", vietnamese: "leo núi dã ngoại", image: "6.webp" },
+    { id: 7, kanji: "厳しい", hiragana: "きびしい", vietnamese: "nghiêm khắc, khắt khe", image: "7.webp" },
+    { id: 8, kanji: "混む", hiragana: "こむ", vietnamese: "đông đúc, chen lấn", image: "8.webp" },
+    { id: 9, kanji: "上がる", hiragana: "あがる", vietnamese: "leo lên; tăng lên", image: "9.webp" },
+    { id: 10, kanji: "下がる", hiragana: "さがる", vietnamese: "giảm xuống; hạ xuống", image: "10.webp" },
+    { id: 11, kanji: "乾く", hiragana: "かわく", vietnamese: "khô (quần áo, không khí...)", image: "11.webp" },
+    { id: 12, kanji: "止む", hiragana: "やむ", vietnamese: "dừng; tạnh (mưa)", image: "12.webp" },
+    { id: 13, kanji: "叶う", hiragana: "かなう", vietnamese: "(ước mơ) thành hiện thực", image: "13.webp" },
+    { id: 14, kanji: "(~を)楽しむ", hiragana: "たのしむ", vietnamese: "tận hưởng; mong chờ", image: "14.webp" },
+    { id: 15, kanji: "(~を)返す", hiragana: "かえす", vietnamese: "trả lại", image: "15.webp" },
+    { id: 16, kanji: "(~を)中止(する)", hiragana: "ちゅうし(する)", vietnamese: "huỷ, huỷ bỏ", image: "16.webp" },
+    { id: 17, kanji: "成功(する)", hiragana: "せいこう(する)", vietnamese: "thành công", image: "17.webp" },
+    { id: 18, kanji: "失敗(する)", hiragana: "しっぱい(する)", vietnamese: "thất bại", image: "18.webp" },
+    { id: 19, kanji: "きっと", hiragana: "きっと", vietnamese: "nhất định, chắc chắn", image: "19.webp" },
+    { id: 20, kanji: "ただいま", hiragana: "ただいま", vietnamese: "tôi đã về rồi đây", image: "20.webp" },
+    { id: 21, kanji: "おかえり(なさい)", hiragana: "おかえり(なさい)", vietnamese: "bạn đã về rồi đấy à!", image: "21.webp" },
+  ],
+};

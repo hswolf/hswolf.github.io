@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { ChevronLeft, ChevronRight, Repeat, RotateCw, Shuffle } from "lucide-react";
-import type { Deck, FlashCard } from "../../data/flashcards/n5-lesson12-c";
+import type { Deck } from "../../data/flashcards/types";
 
 type Props = {
   deck: Deck;

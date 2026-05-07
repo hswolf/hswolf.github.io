@@ -7,21 +7,24 @@ description: Use when adding a new Japanese vocabulary flashcard deck to this re
 
 ## Overview
 
-The flashcard experience lives at `/japanese/flashcards` and is powered by a React island (`src/components/flashcards/Flashcards.tsx`) hydrated on an Astro page. A "deck" is a typed TS file plus a folder of images. Current repo ships one deck (`n5-lesson12-c`). This skill covers how to add another, edit an existing one, or touch the supporting machinery without breaking the mobile polish and review-mode state machinery that already landed.
+The flashcard experience lives at `/japanese/flashcards` and is powered by a React island (`src/components/flashcards/Flashcards.tsx`) hydrated on per-deck Astro pages. A "deck" is a typed TS file plus a folder of images. Current repo ships three decks: `n5-lesson12-c` (39 cards, fully imaged), `n5-lesson15-1` (21 cards), `n5-lesson15-6` (25 cards). The routing is multi-deck: `/japanese/flashcards` is a deck index, `/japanese/flashcards/<slug>` mounts the island for one deck. This skill covers how to add another deck, edit an existing one, or touch the supporting machinery without breaking the mobile polish and review-mode state machinery that already landed.
 
 ## Quick reference
 
 | What you want | Where |
 |---|---|
 | Deck data (cards, title, slug) | `src/data/flashcards/<deck-slug>.ts` |
+| Shared types (`Deck`, `FlashCard`) | `src/data/flashcards/types.ts` |
+| Deck registry (`decks` array, `getDeckBySlug`) | `src/data/flashcards/index.ts` |
 | Per-card images | `public/images/flashcards/<deck-slug>/<id>.webp` |
 | Image directory README + prompt table | `public/images/flashcards/<deck-slug>/README.md` |
-| Page wrapper | `src/pages/japanese/flashcards.astro` (single-deck today) |
+| Deck index landing page | `src/pages/japanese/flashcards/index.astro` |
+| Per-deck page wrapper (dynamic, one static page per slug via `getStaticPaths`) | `src/pages/japanese/flashcards/[deck].astro` |
 | React component (kanji/hiragana/meaning/image/controls) | `src/components/flashcards/Flashcards.tsx` |
 | Tailwind theme tokens (zen palette) | `src/styles/tailwind.css` |
-| Image-generation script (Pollinations or HF) | `scripts/generate-flashcard-images.mjs` |
+| Image-generation script (Pollinations or HF, `DECK` env var picks the slug) | `scripts/generate-flashcard-images.mjs` |
 | Env for HF provider | `.env` (copy from `.env.example`) |
-| Nav entry pointing at the deck | `src/components/Header.astro` (`Nhật` link) |
+| Nav entry pointing at the index | `src/components/Header.astro` (`Nhật` link → `/japanese/flashcards`) |
 | Per-tab review state (memorized / not-memorized flags) | `window.sessionStorage` key `flashcards:session:<deck.slug>` |
 | Specs + plans (reference) | `docs/superpowers/specs/` + `docs/superpowers/plans/` — notably `2026-04-17-flashcards-mobile-polish-design.md` and `2026-04-17-flashcards-review-mode-design.md` |
 
@@ -37,9 +40,10 @@ The flashcard experience lives at `/japanese/flashcards` and is powered by a Rea
 
 ## Deck data shape
 
-Every deck is a typed `Deck` object exported from `src/data/flashcards/<deck-slug>.ts`:
+Types live in `src/data/flashcards/types.ts`. Each deck file imports from there:
 
 ```ts
+// src/data/flashcards/types.ts
 export type FlashCard = {
   id: number;          // 1-indexed, used for image filenames
   kanji: string;       // front primary — "兄弟", or "ごみ" if kana-only
@@ -54,9 +58,24 @@ export type Deck = {
   subtitle: string;    // sits beneath the h1
   cards: FlashCard[];
 };
+```
 
+```ts
+// src/data/flashcards/<deck-slug>.ts
+import type { Deck } from "./types";
 export const <deckVar>: Deck = { slug, title, subtitle, cards };
 ```
+
+The deck must also be registered in `src/data/flashcards/index.ts`:
+
+```ts
+import { n5Lesson12C } from "./n5-lesson12-c";
+import { n5Lesson15Part1 } from "./n5-lesson15-1";
+// ...
+export const decks: Deck[] = [n5Lesson12C, n5Lesson15Part1, /* new deck */];
+```
+
+`[deck].astro` reads `decks` in `getStaticPaths()` to materialize one static page per slug at build time, and `index.astro` reads it to render the landing list. Forgetting to register a new deck means it has data but no route.
 
 Conventions that already bit us:
 
@@ -66,28 +85,26 @@ Conventions that already bit us:
 
 ## Adding a new deck (step by step)
 
-1. **Pick a slug.** Kebab-case, lowercase, e.g. `n5-lesson13-a`. Same string will be the URL segment, image folder name, and exported variable root.
+1. **Pick a slug.** Kebab-case, lowercase, e.g. `n5-lesson13-a`. Same string will be the URL segment, image folder name, and the basis of the exported variable name.
 
-2. **Create the data file.** `src/data/flashcards/<slug>.ts`. Copy the shape from `n5-lesson12-c.ts`. Populate `cards` with sequential `id`s from 1; pre-fill `image: "N.webp"` for every card so image drop-in works without touching the file again.
+2. **Create the data file.** `src/data/flashcards/<slug>.ts`. Import `Deck` type from `./types`. Populate `cards` with sequential `id`s from 1; pre-fill `image: "N.webp"` for every card so image drop-in works without touching the file again.
 
-3. **Create the image folder.** `mkdir public/images/flashcards/<slug>` and add a `README.md` modeled on `n5-lesson12-c/README.md` — style-prefix paragraph + a per-card prompt table. This README is where the prompt text for the script lives conceptually; the script itself has the prompt list inline.
+3. **Register the deck.** Add an `import { ... } from "./<slug>"` and append to the `decks` array in `src/data/flashcards/index.ts`. This is what wires the deck into both the index landing page and the dynamic `[deck].astro` route.
 
-4. **Decide routing.**
-   - **Single deck (swap):** Change the import in `src/pages/japanese/flashcards.astro` to point at the new deck. The old deck becomes unlinked but its data/images stay.
-   - **Multiple decks (keep both):** Refactor the page into a deck-picker index + per-deck routes (see "Extending to multiple decks" below).
+4. **Create the image folder.** `mkdir public/images/flashcards/<slug>` and add a `README.md` modeled on `n5-lesson12-c/README.md` — style-prefix paragraph + a per-card prompt table. The README is the human reference; the script holds its own prompt copy keyed by deck slug.
 
-5. **Update the image-generation script** if you'll generate images for this deck: open `scripts/generate-flashcard-images.mjs`, replace the `PROMPTS` object's values with the new concepts, and confirm `OUT_DIR` (near the top of the file) points at the right slug folder. The script currently hard-codes `n5-lesson12-c`; generalise it if you plan to support multiple decks permanently.
+5. **Add prompts to the image-generation script** (only if you intend to gen images): in `scripts/generate-flashcard-images.mjs`, add a `"<slug>": { 1: "...", 2: "...", ... }` entry to `ALL_PROMPTS`. Keep the `STYLE` constant alone — both providers and all decks share it.
 
-6. **Generate images.** Defaults to Pollinations (free, no key):
+6. **Generate images.** Defaults to Pollinations (free, no key) and the `n5-lesson12-c` deck. To target a new deck, set `DECK`:
    ```bash
-   npm run gen:images
+   DECK=n5-lesson15-1 npm run gen:images
    ```
    Or use Hugging Face if you have credits (better quality):
    ```bash
    # in .env: HF_TOKEN=hf_...
-   npm run gen:images:hf
+   DECK=n5-lesson15-1 npm run gen:images:hf
    ```
-   Both scripts:
+   Both invocations:
    - Skip cards whose `<id>.webp` already exists in the output folder (safe re-run / resume)
    - Convert PNG → WebP via `sharp`
    - Report per-card success/failure with a summary at the end
@@ -96,7 +113,7 @@ Conventions that already bit us:
    ```bash
    npm run dev    # port 4321
    ```
-   Open `/japanese/flashcards` (or the new route). Check flip, next/prev, shuffle, hiragana-suppression on kana-only cards, image render, empty-image fallback.
+   Open `/japanese/flashcards` to confirm the new deck appears in the index, then click through to `/japanese/flashcards/<slug>`. Check flip, next/prev, shuffle, hiragana-suppression on kana-only cards, image render, empty-image fallback.
 
 8. **Ship.** Commit data + images + script edits in cohesive units; push to main; the `withastro/action` workflow in `.github/workflows/deploy.yml` deploys automatically.
 
@@ -171,7 +188,8 @@ When the pool reaches zero (user marked every card memorized), the component ear
 | Image file named `1.png` but card data says `image: "1.webp"` | Pick one extension and make both match. WebP is smaller and is the default convention. |
 | Adding a new deck at `/japanese/<slug>` without updating `Header.astro` | Either add a new nav link or change the existing `Nhật` href. The active-state check uses `pathname.startsWith('/japanese')`, so sub-routes auto-highlight the nav. |
 | Editing the Flashcards component and watching mobile layout break | The mobile polish (button sizing, gap, counter position) is spec'd in `docs/superpowers/specs/2026-04-17-flashcards-mobile-polish-design.md`. Read it before restructuring. |
-| Shipping `n5-lesson13.ts` while the script's `PROMPTS` still target `n5-lesson12-c` | Update `scripts/generate-flashcard-images.mjs`'s `OUT_DIR` and `PROMPTS`, or generalise the script to accept a slug. |
+| Adding a new deck file but forgetting to register it in `src/data/flashcards/index.ts` | The deck has data and an image folder but no route — `getStaticPaths()` in `[deck].astro` only sees what the registry exports. Add the import + push to `decks`. |
+| Generating images without setting `DECK=<slug>` | `npm run gen:images` defaults to `n5-lesson12-c`. For a new deck, prefix with `DECK=<slug>`, e.g. `DECK=n5-lesson15-1 npm run gen:images`. The script errors loudly if `DECK` doesn't match a key in `ALL_PROMPTS`. |
 | Running `npm run gen:images` and seeing 429s mid-run | HF free tier runs out mid-batch. Switch to default Pollinations (`npm run gen:images`) to backfill the remaining cards. Mixed provider output is visible but close enough. |
 | Forgetting `text-center` on a new caption `<p>` | Intrinsic-width centering only works for short content. Always include `text-center` on captions so future text changes don't misalign. |
 | Animating everything with `transition-all` on buttons | We deliberately use `transition-transform duration-150 ease-out` to avoid animating box-shadow and keep tap feel snappy. Keep it narrow. |
@@ -182,19 +200,19 @@ When the pool reaches zero (user marked every card memorized), the component ear
 | Renaming a deck's `slug` without migrating sessionStorage | The session key is `flashcards:session:<deck.slug>`. Changing the slug orphans the old key — users who had progress silently start from scratch. If you must rename, prefer keeping the old slug and changing the display title/subtitle instead. |
 | Changing the shape of `SessionState` without bumping `SESSION_VERSION` | `readSession` rejects payloads whose `version !== SESSION_VERSION` and returns `{}`. If you change the schema (e.g. add per-card timestamps for spaced repetition), bump the constant so existing tabs don't try to use incompatible shapes. |
 
-## Extending to multiple decks
+## Multi-deck architecture (already in place)
 
-When a second deck lands and you want both reachable:
+Three pieces work together to make new decks "just appear" once they're registered:
 
-1. Move the current `src/pages/japanese/flashcards.astro` to `src/pages/japanese/flashcards/[deck].astro` (Astro dynamic route) or to `src/pages/japanese/flashcards/<slug>.astro` (static).
-2. Add a landing page at `src/pages/japanese/flashcards/index.astro` that lists decks and links to each.
-3. Update `Header.astro`'s `Nhật` link to point at the new index.
-4. Update the generation script to iterate over a list of deck slugs rather than a hardcoded `OUT_DIR`.
-5. Consider moving `PROMPTS` out of the script into each deck's data file as a `cards[i].prompt` field.
+1. **Registry** — `src/data/flashcards/index.ts` exports a `decks: Deck[]` array. Add an import + array entry to expose a deck.
+2. **Dynamic route** — `src/pages/japanese/flashcards/[deck].astro` calls `getStaticPaths()` over the registry to emit one static page per slug at build time.
+3. **Landing page** — `src/pages/japanese/flashcards/index.astro` reads the same registry and renders deck cards linking into each route.
 
-**Session persistence already handles multiple decks.** The `useSessionStatuses` hook keys sessionStorage by `deck.slug`, so switching decks loads each one's own memorized/not-memorized state and they never collide. No refactor needed there.
+The `Nhật` nav link lives at `/japanese/flashcards` (the index). `pathname.startsWith('/japanese')` matches it and any sub-route, so the active highlight just works.
 
-This page/script refactor is **not** done yet — the current shape is optimised for one deck.
+**Session persistence handles multiple decks for free.** The `useSessionStatuses` hook keys sessionStorage by `deck.slug`, so switching decks loads each one's own memorized/not-memorized state and they never collide.
+
+**Image-generation script** (`scripts/generate-flashcard-images.mjs`) takes a `DECK` env var (default `n5-lesson12-c`) and indexes into `ALL_PROMPTS[DECK]`. `OUT_DIR` is computed from `DECK`. Add a deck's prompts under a new key in `ALL_PROMPTS` to make it generatable.
 
 ## Red flags — stop and reconsider
 
