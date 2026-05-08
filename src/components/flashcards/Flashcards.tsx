@@ -302,6 +302,20 @@ export default function Flashcards({ deck }: Props) {
 
         {!isFlipped ? (
           <div className="flex flex-col items-center justify-center text-center space-y-4 w-full">
+            {currentCard.kanji !== currentCard.hiragana && (
+              <p className="text-xl font-medium text-[color:var(--color-accent)]">
+                {currentCard.hiragana}
+              </p>
+            )}
+            <h2 className="font-serif text-5xl font-semibold text-[color:var(--color-ink)] tracking-wider leading-tight">
+              {currentCard.kanji}
+            </h2>
+            <p className="text-sm font-medium text-[color:var(--color-ink-muted)]">
+              Chạm để lật
+            </p>
+          </div>
+        ) : (
+          <div className="flex flex-col items-center justify-center text-center space-y-4 w-full">
             {currentCard.image && !failedImages.has(currentCard.id) && (
               <SafeImage
                 key={currentCard.id}
@@ -317,25 +331,11 @@ export default function Flashcards({ deck }: Props) {
               />
             )}
             {currentCard.kanji !== currentCard.hiragana && (
-              <p className="text-xl font-medium text-[color:var(--color-accent)]">
+              <p className="text-2xl font-medium text-[color:var(--color-accent)]">
                 {currentCard.hiragana}
               </p>
             )}
-            <h2 className="font-serif text-5xl font-semibold text-[color:var(--color-ink)] tracking-wider leading-tight">
-              {currentCard.kanji}
-            </h2>
-            <p className="text-sm font-medium text-[color:var(--color-ink-muted)]">
-              Chạm để lật
-            </p>
-          </div>
-        ) : (
-          <div className="flex flex-col items-center justify-center text-center space-y-6 w-full">
-            {currentCard.kanji !== currentCard.hiragana && (
-              <p className="text-2xl font-medium text-[color:var(--color-accent)] mb-2">
-                {currentCard.hiragana}
-              </p>
-            )}
-            <h2 className="font-serif text-3xl font-semibold text-[color:var(--color-ink)] mb-2 px-4">
+            <h2 className="font-serif text-3xl font-semibold text-[color:var(--color-ink)] px-4">
               {currentCard.vietnamese}
             </h2>
             <div className="mt-2 flex flex-wrap items-center justify-center gap-4">

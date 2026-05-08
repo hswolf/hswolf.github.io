@@ -146,15 +146,16 @@ Every card has a `CardStatus`: `"unseen" | "memorized" | "not_memorized"`. Fresh
 
 ### Front render (per card)
 
-- Optional image (160 px square, `SafeImage` with graceful 404 fallback)
 - Small accent-gold dot at top-left when the current card is `not_memorized` (purely visual; the parent card's `aria-label` carries the status string for AT)
-- Hiragana line (accent color, serif), suppressed if `kanji === hiragana`
+- Hiragana line (accent color, serif, `text-xl`), suppressed if `kanji === hiragana`
 - Kanji (large, Cormorant Garamond, 5xl)
 - "Chạm để lật" hint (muted)
+- **No image.** The image lives on the back so the front is a pure recall prompt — seeing a picture before recalling the meaning defeats the spaced-repetition exercise.
 
 ### Back render (per card)
 
-- Hiragana (larger, accent), same suppression rule
+- Optional image (160 px square, `SafeImage` with graceful 404 fallback) — first thing rendered, top of the back stack
+- Hiragana (accent, `text-2xl`), same suppression rule
 - Vietnamese meaning (serif, 3xl)
 - Two mark buttons side-by-side: **Chưa thuộc** (muted surface, Repeat icon — NOT `RotateCw`, which is reserved for the flip indicator) and **Đã thuộc** (accent-soft surface)
 - Each mark button **must** call `e.stopPropagation()` in its `onClick` — the card wrapper has its own `onClick={handleFlip}`, so a bare click would both mark AND re-flip the card, producing an incoherent state
