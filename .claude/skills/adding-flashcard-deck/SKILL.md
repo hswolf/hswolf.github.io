@@ -154,9 +154,9 @@ Every card has a `CardStatus`: `"unseen" | "memorized" | "not_memorized"`. Fresh
 
 ### Back render (per card)
 
-- Optional image (160 px square, `SafeImage` with graceful 404 fallback) — first thing rendered, top of the back stack
-- Hiragana (accent, `text-2xl`), same suppression rule
-- Vietnamese meaning (serif, 3xl)
+- Hiragana (accent, `text-2xl`), same suppression rule — first row, so the user reads the kana cue immediately after flipping
+- Vietnamese meaning (serif, 3xl) — visual focal point of the back
+- Optional image (96 px square, `SafeImage` with graceful 404 fallback) — sits *below* the meaning, so it confirms the answer without previewing it; collapses cleanly when the card has no image
 - Two mark buttons side-by-side: **Chưa thuộc** (muted surface, Repeat icon — NOT `RotateCw`, which is reserved for the flip indicator) and **Đã thuộc** (accent-soft surface)
 - Each mark button **must** call `e.stopPropagation()` in its `onClick` — the card wrapper has its own `onClick={handleFlip}`, so a bare click would both mark AND re-flip the card, producing an incoherent state
 

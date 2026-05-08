@@ -31,7 +31,7 @@ function SafeImage({ src, onFail }: SafeImageProps) {
       alt=""
       loading="lazy"
       onError={onFail}
-      className="w-40 h-40 object-contain rounded-2xl"
+      className="w-24 h-24 object-contain rounded-2xl"
     />
   );
 }
@@ -316,6 +316,14 @@ export default function Flashcards({ deck }: Props) {
           </div>
         ) : (
           <div className="flex flex-col items-center justify-center text-center space-y-4 w-full">
+            {currentCard.kanji !== currentCard.hiragana && (
+              <p className="text-2xl font-medium text-[color:var(--color-accent)]">
+                {currentCard.hiragana}
+              </p>
+            )}
+            <h2 className="font-serif text-3xl font-semibold text-[color:var(--color-ink)] px-4">
+              {currentCard.vietnamese}
+            </h2>
             {currentCard.image && !failedImages.has(currentCard.id) && (
               <SafeImage
                 key={currentCard.id}
@@ -330,14 +338,6 @@ export default function Flashcards({ deck }: Props) {
                 }
               />
             )}
-            {currentCard.kanji !== currentCard.hiragana && (
-              <p className="text-2xl font-medium text-[color:var(--color-accent)]">
-                {currentCard.hiragana}
-              </p>
-            )}
-            <h2 className="font-serif text-3xl font-semibold text-[color:var(--color-ink)] px-4">
-              {currentCard.vietnamese}
-            </h2>
             <div className="mt-2 flex flex-wrap items-center justify-center gap-4">
               <button
                 type="button"
