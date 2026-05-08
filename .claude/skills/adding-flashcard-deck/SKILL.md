@@ -26,7 +26,7 @@ The flashcard experience lives at `/japanese/flashcards` and is powered by a Rea
 | Env for HF provider | `.env` (copy from `.env.example`) |
 | Nav entry pointing at the index | `src/components/Header.astro` (`Nhật` link → `/japanese/flashcards`) |
 | Per-tab review state (memorized / not-memorized flags) | `window.sessionStorage` key `flashcards:session:<deck.slug>` |
-| Specs + plans (reference) | `docs/superpowers/specs/` + `docs/superpowers/plans/` — notably `2026-04-17-flashcards-mobile-polish-design.md` and `2026-04-17-flashcards-review-mode-design.md` |
+| Specs + plans (reference) | `docs/superpowers/specs/` + `docs/superpowers/plans/` — notably `2026-04-17-flashcards-mobile-polish-design.md`, `2026-04-17-flashcards-review-mode-design.md`, and `2026-05-08-flashcards-back-image-position-design.md` |
 
 ## When to use
 
@@ -189,6 +189,7 @@ When the pool reaches zero (user marked every card memorized), the component ear
 | Image file named `1.png` but card data says `image: "1.webp"` | Pick one extension and make both match. WebP is smaller and is the default convention. |
 | Adding a new deck at `/japanese/<slug>` without updating `Header.astro` | Either add a new nav link or change the existing `Nhật` href. The active-state check uses `pathname.startsWith('/japanese')`, so sub-routes auto-highlight the nav. |
 | Editing the Flashcards component and watching mobile layout break | The mobile polish (button sizing, gap, counter position) is spec'd in `docs/superpowers/specs/2026-04-17-flashcards-mobile-polish-design.md`. Read it before restructuring. |
+| Moving the card image to the front, or making it the first row of the back | Both defeat the recall exercise — the eye spots the image before the user retrieves the meaning, so the brain never does the retrieval work. The image's job is *confirmation*, not preview. Front: no image at all. Back: image *below* the meaning, smaller (`w-24`). See `docs/superpowers/specs/2026-05-08-flashcards-back-image-position-design.md`. |
 | Adding a new deck file but forgetting to register it in `src/data/flashcards/index.ts` | The deck has data and an image folder but no route — `getStaticPaths()` in `[deck].astro` only sees what the registry exports. Add the import + push to `decks`. |
 | Generating images without setting `DECK=<slug>` | `npm run gen:images` defaults to `n5-lesson12-c`. For a new deck, prefix with `DECK=<slug>`, e.g. `DECK=n5-lesson15-1 npm run gen:images`. The script errors loudly if `DECK` doesn't match a key in `ALL_PROMPTS`. |
 | Running `npm run gen:images` and seeing 429s mid-run | HF free tier runs out mid-batch. Switch to default Pollinations (`npm run gen:images`) to backfill the remaining cards. Mixed provider output is visible but close enough. |
