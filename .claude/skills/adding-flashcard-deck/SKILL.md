@@ -7,7 +7,7 @@ description: Use when adding a new Japanese vocabulary flashcard deck to this re
 
 ## Overview
 
-The flashcard experience lives at `/japanese/flashcards` and is powered by a React island (`src/components/flashcards/Flashcards.tsx`) hydrated on per-deck Astro pages. A "deck" is a typed TS file plus a folder of images. Current repo ships three decks: `n5-lesson12-c` (39 cards, fully imaged), `n5-lesson15-1` (21 cards), `n5-lesson15-6` (25 cards). The routing is multi-deck: `/japanese/flashcards` is a deck index, `/japanese/flashcards/<slug>` mounts the island for one deck. This skill covers how to add another deck, edit an existing one, or touch the supporting machinery without breaking the mobile polish and review-mode state machinery that already landed.
+The flashcard experience lives at `/japanese/flashcards` and is powered by a React island (`src/components/flashcards/Flashcards.tsx`) hydrated on per-deck Astro pages. A "deck" is a typed TS file plus a folder of images. Current repo ships four decks: `n5-lesson12-c` (39 cards, fully imaged), `n5-lesson15-1` (21 cards), `n5-lesson15-6` (25 cards), `n5-lesson16` (39 cards, no images yet). The routing is multi-deck: `/japanese/flashcards` is a deck index, `/japanese/flashcards/<slug>` mounts the island for one deck. This skill covers how to add another deck, edit an existing one, or touch the supporting machinery without breaking the mobile polish and review-mode state machinery that already landed.
 
 ## Quick reference
 

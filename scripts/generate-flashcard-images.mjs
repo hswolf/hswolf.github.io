@@ -8,6 +8,7 @@
 //   - n5-lesson12-c (39 cards)
 //   - n5-lesson15-1 (21 cards)
 //   - n5-lesson15-6 (25 cards)
+//   - n5-lesson16   (39 cards)
 //
 // Setup (Pollinations – zero config):
 //   npm run gen:images                       # default deck
@@ -144,6 +145,47 @@ const ALL_PROMPTS = {
     23: "a wall clock with a quick-motion arrow, suggesting instant action",
     24: "a thermometer or progress bar showing significant progress, three-quarters full",
     25: "a thoughtful person with a large question mark above their head, considering possibilities",
+  },
+  "n5-lesson16": {
+    1: "a group of people sitting on a picnic blanket under cherry blossom trees, petals drifting in the air",
+    2: "a runner crossing a starting line with a small flag marking 1st place",
+    3: "a desk calendar with the Saturday and Sunday squares highlighted in warm gold",
+    4: "a cracked road surface with shaking buildings, soft motion lines, daylight",
+    5: "a person napping peacefully on a sofa under warm afternoon light",
+    6: "a child crossing fingers behind their back with a sheepish expression",
+    7: "a sleeping newborn swaddled in a soft blanket, gentle light",
+    8: "a small wooden house with orange flames and rising smoke, no people",
+    9: "an open hardcover textbook on a wooden desk with a pencil beside it",
+    10: "the silhouette of Big Ben and a red double-decker London bus at dusk",
+    11: "the five Olympic rings on a flagpole with athletes marching beneath",
+    12: "an envelope of cash with a ribbon tied around it, gift-style",
+    13: "one person watching another receive a prize with a wistful expression",
+    14: "a person on a podium holding a gold medal, fists raised in triumph",
+    15: "a person extending a hand to invite another to join, warm smile",
+    16: "a single candle burning beside a framed photograph on a small table",
+    17: "two silhouettes walking in opposite directions on a forest path at dusk",
+    18: "a person sitting on a bench with head in hands while an opponent celebrates in the background",
+    19: "a queue of customers at a small storefront with shelves nearly empty",
+    20: "a parent cradling a newborn baby in soft morning light",
+    21: "a person setting down a cigarette beside an empty ashtray, deliberate gesture",
+    22: "a champion holding a large trophy overhead with confetti falling",
+    23: "a person with wide eyes and hands raised in surprise",
+    24: "a stack of wrapped gifts growing taller, abundance feeling",
+    25: "a young person leaning in with an 'are you serious?' expression",
+    26: "a person clutching their head with wide eyes, oh-no moment",
+    27: "a paper fish taped to someone's back with a prankster smiling behind them",
+    28: "two hands offering a small wrapped gift across a table",
+    29: "a single cylindrical battery standing upright with a faint glow",
+    30: "a weather map with sun, cloud, and rain icons distributed over regions",
+    31: "a busy city intersection with cars and a traffic light",
+    32: "overlapping geometric shapes (circle, square, triangle) in earth-tone colors",
+    33: "a person looking through a brass telescope toward a distant horizon",
+    34: "a person clutching their knee and wincing, small bandage visible",
+    35: "a sprinter mid-stride with motion lines and a blurred background",
+    36: "a yellow warning triangle sign in front of a steep cliff edge",
+    37: "a moving truck parked outside a house with boxes being carried in",
+    38: "stacked cardboard moving boxes in an empty room, ready to unpack",
+    39: "a hand demonstrating a folding technique with one clear step shown",
   },
 };
 
