@@ -52,6 +52,7 @@ Decks currently in the registry (`src/data/flashcards/index.ts`):
 - `n5-lesson15-1` — N5 Bài 15 - Phần 1 (21 cards, fully imaged)
 - `n5-lesson15-6` — N5 Bài 15 - Phần 6 (25 cards, fully imaged)
 - `n5-lesson16` — N5 Bài 16 (39 cards, no images yet — prompts pre-loaded in script)
+- `n5-lesson17` — N5 Bài 17 (34 cards, no images yet — prompts pre-loaded in script)
 
 **Adding or editing a deck:** see [`.claude/skills/adding-flashcard-deck/SKILL.md`](.claude/skills/adding-flashcard-deck/SKILL.md) — covers deck data shape, image folder conventions, the two image-generation providers (Pollinations default / Hugging Face opt-in), mobile polish invariants, and the multi-deck routing.
 

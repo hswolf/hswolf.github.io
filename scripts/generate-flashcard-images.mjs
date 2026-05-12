@@ -9,6 +9,7 @@
 //   - n5-lesson15-1 (21 cards)
 //   - n5-lesson15-6 (25 cards)
 //   - n5-lesson16   (39 cards)
+//   - n5-lesson17   (34 cards)
 //
 // Setup (Pollinations – zero config):
 //   npm run gen:images                       # default deck
@@ -186,6 +187,42 @@ const ALL_PROMPTS = {
     37: "a moving truck parked outside a house with boxes being carried in",
     38: "stacked cardboard moving boxes in an empty room, ready to unpack",
     39: "a hand demonstrating a folding technique with one clear step shown",
+  },
+  "n5-lesson17": {
+    1: "a person leaning in with bright curious eyes, magnifying glass in hand",
+    2: "an open dictionary on a wooden table with a fingertip pointing at one entry, no readable text",
+    3: "a single red pin marker dropped onto a stylized paper map",
+    4: "two people exchanging a friendly nod across a small café table",
+    5: "a sports player in uniform with a numbered jersey, ready stance, no text",
+    6: "a doctor reading a clipboard chart beside a seated patient in a clinic",
+    7: "a theatrical stage with performers mid-song under warm spotlight beams",
+    8: "two stylized phone-shaped speech bubbles overlapping, soft chat icons",
+    9: "a long winding road stretching toward distant mountains at golden hour",
+    10: "a sunrise over rooftops with a small alarm clock in the foreground",
+    11: "a refined elder giving a small approving nod, formal posture",
+    12: "a cup of dark coffee with steam rising, a person wincing slightly nearby",
+    13: "a small figure standing beside a comparatively giant tree, scale contrast",
+    14: "a person admiring themselves in a mirror wearing a well-matched outfit",
+    15: "a person leaning over an open book with rapt attention, soft desk lamp",
+    16: "a runner crouched at a starting block, ready to launch into the race",
+    17: "a hand pointing at a restaurant menu while a waiter takes a note",
+    18: "a thoughtful person stroking their chin, soft pensive expression",
+    19: "a visitor handing a small bouquet to someone resting in bed, gentle scene",
+    20: "a person leaning in conspiratorially to share a secret, hand cupped near mouth",
+    21: "a city skyline silhouette with a small directional signpost in the foreground",
+    22: "two colleagues working side by side at adjacent desks in a warm office",
+    23: "a cargo ship loaded with shipping containers docked at a quiet port",
+    24: "a person wearing a traditional Japanese kimono in soft muted tones, full figure",
+    25: "a person gently feeling their own forehead, checking for fever",
+    26: "a person's silhouette with two small contrasting mood expressions floating beside them",
+    27: "two people sharing a meal at a cozy candle-lit table for two",
+    28: "a hand operating a vending machine or ATM, button pressed mid-motion",
+    29: "one person gesturing to introduce two others to each other, polite greeting",
+    30: "scissors mid-snip on a strand of hair, calm salon scene",
+    31: "a small price tag tied to an object with a tidy pile of coins beside it",
+    32: "a person with a large question mark floating above their head, puzzled",
+    33: "a soft arrow flowing from one icon to a logical-conclusion icon",
+    34: "open hands gesturing in a 'how do I do this?' pose with implied instructions",
   },
 };
 
