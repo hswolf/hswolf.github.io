@@ -10,6 +10,7 @@
 //   - n5-lesson15-6 (25 cards)
 //   - n5-lesson16   (39 cards)
 //   - n5-lesson17   (34 cards)
+//   - n5-lesson18   (46 cards)
 //
 // Setup (Pollinations – zero config):
 //   npm run gen:images                       # default deck
@@ -223,6 +224,54 @@ const ALL_PROMPTS = {
     32: "a person with a large question mark floating above their head, puzzled",
     33: "a soft arrow flowing from one icon to a logical-conclusion icon",
     34: "open hands gesturing in a 'how do I do this?' pose with implied instructions",
+  },
+  "n5-lesson18": {
+    1: "a handful of fine sand pouring through fingers above a small dune",
+    2: "a person bowing politely with a soft speech bubble, formal posture",
+    3: "a coiled length of cord resting on a wooden surface",
+    4: "a wall electrical outlet with two slots, plug nearby",
+    5: "several small clothing buttons resting on folded fabric",
+    6: "a person smiling broadly with arms slightly raised in joy",
+    7: "a person flexing biceps confidently, strong stance",
+    8: "a wilting plant in a small pot, drooping leaves",
+    9: "one person helping another up off the ground, warm gesture",
+    10: "a person sitting alone on a bench looking at the ground, melancholy mood",
+    11: "a family sharing a warm meal at a cozy table",
+    12: "a student studying intently at a desk with neatly stacked notes",
+    13: "a hand erasing a wrong answer on a sheet of paper",
+    14: "a snapped string lying on a table with frayed ends",
+    15: "a loose clothing button rolling on a wooden floor",
+    16: "a snapped pencil in two pieces, eraser visible",
+    17: "a light switch in the off position with a darkened room background",
+    18: "a soccer ball entering the back of a net, goalpost visible",
+    19: "a person with a gentle hand on their chest, soft contemplative expression",
+    20: "a close-up profile of a person's hairstyle showing bangs across the forehead",
+    21: "a close-up of human lips on a soft-lit face",
+    22: "a small ceramic bowl of white sugar with a tiny spoon",
+    23: "a glowing light bulb beside a small switch on a wall",
+    24: "a clear glass of milk on a clean kitchen counter",
+    25: "a clean dark green chalkboard with a piece of chalk on the ledge",
+    26: "a plain warm-toned wall with a single picture frame hanging on it",
+    27: "a thermometer reading a mid temperature against a soft neutral background",
+    28: "an air conditioner unit blowing visible cool air streams downward",
+    29: "a small stack of paper flyers on a counter",
+    30: "a wall-mounted air conditioner unit in a calm indoor scene",
+    31: "a dimly lit room with a single small lamp glowing softly in a corner",
+    32: "a steaming mug of tea cradled in both hands, cozy warmth",
+    33: "a single sheet of paper held up to soft light, translucent",
+    34: "a stack of thick hardcover books on a wooden desk",
+    35: "a single white flower against a soft cream background",
+    36: "a person covering their ears with both hands, exaggerated discomfort expression",
+    37: "kitchen scissors mid-cut on a piece of paper",
+    38: "a paintbrush applying soft color to a canvas or wall",
+    39: "hands folding a sheet of paper in half neatly",
+    40: "ice cubes floating in a clear glass of water",
+    41: "a small round cake being sliced into equal portions",
+    42: "two hands exchanging small objects across a table",
+    43: "hands held near a small space heater, gentle warmth radiating",
+    44: "a hand gesturing 'more' with palm turned up, inviting motion",
+    45: "a person trying repeatedly to fit a key into a lock, mild frustration",
+    46: "a thermometer with visible degree markings, scale in focus",
   },
 };
 
