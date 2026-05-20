@@ -11,6 +11,7 @@
 //   - n5-lesson16   (39 cards)
 //   - n5-lesson17   (34 cards)
 //   - n5-lesson18   (46 cards)
+//   - n5-lesson19   (46 cards)
 //
 // Setup (Pollinations – zero config):
 //   npm run gen:images                       # default deck
@@ -272,6 +273,54 @@ const ALL_PROMPTS = {
     44: "a hand gesturing 'more' with palm turned up, inviting motion",
     45: "a person trying repeatedly to fit a key into a lock, mild frustration",
     46: "a thermometer with visible degree markings, scale in focus",
+  },
+  "n5-lesson19": {
+    1: "a tidy bedroom with a small bed and a warm bedside lamp",
+    2: "a wooden shelf with neatly arranged books and a small plant",
+    3: "jigsaw puzzle pieces scattered on a wooden table, partly assembled",
+    4: "a stylized bar chart and line graph on a clean computer screen",
+    5: "a small kitchen timer with a dial in the foreground",
+    6: "a singer performing on a small stage under warm spotlights",
+    7: "two hands cradling a small precious object, gentle careful gesture",
+    8: "pencil height marks ascending on a doorframe with a child silhouette beside it",
+    9: "hands stretched toward a small fireplace with a soft warm glow",
+    10: "a lamp turning on, soft light spreading into a previously dim room",
+    11: "a kettle on a stove with steam rising from the spout",
+    12: "bubbles rising in a clear pot of boiling water",
+    13: "a person peeling off a small bandage with a relieved smile",
+    14: "a doctor handing a small bottle of medicine to a patient",
+    15: "a phone slipping out of a back pocket mid-fall",
+    16: "mud splashing onto a clean white shoe",
+    17: "a finger pressing a power button, screen going dark",
+    18: "a hairdryer pointed at a damp towel, gentle motion lines",
+    19: "two hands tearing a sheet of paper in half",
+    20: "a small market vendor handing fruit to a customer",
+    21: "a broken wooden toy lying on the floor",
+    22: "a glass cup shattering with shards captured mid-air",
+    23: "an axe mid-swing felling a small tree, motion blur",
+    24: "small mechanical gears in motion, gentle rotation",
+    25: "scaffolding around a newly built modest building",
+    26: "a framed picture hanging on a warm-toned wall",
+    27: "hands placing a picture frame onto a wall hook",
+    28: "a glass of icy water with condensation beading on the outside",
+    29: "a hand dropping crumpled paper into an open trash bin",
+    30: "one person reaching down to pull another up onto a ledge",
+    31: "a car parked beside a small stop sign on a quiet street",
+    32: "a person tugging at their collar before a speech, nervous expression",
+    33: "a polite hand gesture meaning 'no thanks', refined manner",
+    34: "a person gesturing with both hands as if explaining a reason",
+    35: "a young man pointing to himself with a small confident smile",
+    36: "a planner notebook with marked dates and a pen beside it",
+    37: "a single landscape scene split between day on one side and night on the other",
+    38: "hands sticking a poster onto a wall with a piece of tape",
+    39: "a small table being decorated with flowers and candles",
+    40: "small saplings already planted in a tidy row in a garden bed",
+    41: "hands placing a sapling into freshly dug soil",
+    42: "books being arranged neatly on a wooden shelf",
+    43: "a hand swapping one small icon for another, comparison gesture",
+    44: "a starting line with a green flag raised, ready signal",
+    45: "a lunchbox being packed with prepared ingredients beside it",
+    46: "perfectly stacked books on a tidy minimalist desk",
   },
 };
 
