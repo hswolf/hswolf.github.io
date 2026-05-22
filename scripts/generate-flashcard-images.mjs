@@ -12,6 +12,7 @@
 //   - n5-lesson17   (34 cards)
 //   - n5-lesson18   (46 cards)
 //   - n5-lesson19   (46 cards)
+//   - n5-lesson20   (42 cards, combines parts A and B)
 //
 // Setup (Pollinations – zero config):
 //   npm run gen:images                       # default deck
@@ -321,6 +322,50 @@ const ALL_PROMPTS = {
     44: "a starting line with a green flag raised, ready signal",
     45: "a lunchbox being packed with prepared ingredients beside it",
     46: "perfectly stacked books on a tidy minimalist desk",
+  },
+  "n5-lesson20": {
+    1: "a small child seen from behind, walking on a quiet path",
+    2: "a researcher in a lab coat examining a sample under a microscope",
+    3: "a quiet art museum hall with paintings hung on the walls",
+    4: "an old open history book with a feather pen beside it on a desk",
+    5: "a nurse in uniform holding a clipboard with a gentle smile",
+    6: "a colorful picture book open on a child's lap, soft warm light",
+    7: "various cosmetic bottles and a lipstick arranged neatly on a vanity",
+    8: "a balanced gavel and a small scale of justice on a wooden bench",
+    9: "a person in elegant attire with a top hat and a small briefcase",
+    10: "a maid in apron carrying a feather duster, polite stance",
+    11: "a small drugstore storefront with shelves of products visible inside",
+    12: "a hand reaching for a small object found among fallen leaves",
+    13: "a hand pouring water into a coffee dripper, steam gently rising",
+    14: "scientists collaborating around a table with notebooks and a globe",
+    15: "a cargo ship arriving at a port with crates being unloaded",
+    16: "a cargo ship leaving a port loaded with shipping containers",
+    17: "a person tapping a friend's shoulder gently to get their attention",
+    18: "a wall clock with a small forward arrow on the dial",
+    19: "a person with a tilted head and one finger raised, wondering",
+    20: "a guest bowing politely at the entrance of a traditional home",
+    21: "a thought bubble with a question mark above a person's head",
+    22: "a swatch of warm brown color beside a small wooden block",
+    23: "an elderly person walking with a cane on a quiet path",
+    24: "a single felt hat hanging on a coat hook",
+    25: "a folded jacket resting on a wooden chair",
+    26: "a pair of cotton socks rolled neatly side by side",
+    27: "a delicate necklace resting on a velvet display cushion",
+    28: "a pair of sunglasses on a sunlit wooden table",
+    29: "a pair of small earrings on a small jewelry tray",
+    30: "a youthful person smiling outdoors with sunlight on their face",
+    31: "a brown leather bag against a soft neutral background",
+    32: "a single bright yellow lemon on a white plate",
+    33: "a clear blue sky with a single soft cloud drifting",
+    34: "hands removing a watch from a wrist",
+    35: "a hand picking up a single book from a stack",
+    36: "a person putting on a pair of trousers, mid-action",
+    37: "hands wrapping a scarf around the neck",
+    38: "a person putting a hat on their head",
+    39: "a downward bar chart shrinking, decline gesture",
+    40: "a person placing eyeglasses onto their face",
+    41: "a hand fastening a necklace clasp behind the neck",
+    42: "an upward bar chart growing, progress gesture",
   },
 };
 
