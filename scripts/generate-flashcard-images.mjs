@@ -13,6 +13,7 @@
 //   - n5-lesson18   (46 cards)
 //   - n5-lesson19   (46 cards)
 //   - n5-lesson20   (42 cards, combines parts A and B)
+//   - n5-lesson20-c (19 cards, part C)
 //
 // Setup (Pollinations – zero config):
 //   npm run gen:images                       # default deck
@@ -366,6 +367,27 @@ const ALL_PROMPTS = {
     40: "a person placing eyeglasses onto their face",
     41: "a hand fastening a necklace clasp behind the neck",
     42: "an upward bar chart growing, progress gesture",
+  },
+  "n5-lesson20-c": {
+    1: "a small bell mid-ring with soft sound waves radiating outward",
+    2: "a steaming pot with curling aromatic wisps rising upward",
+    3: "a tongue gently tasting from a small spoon, close-up",
+    4: "a hand reaching to touch a soft textured surface",
+    5: "a small mound of white salt with a tiny wooden spoon",
+    6: "a single smooth round stone resting on fine sand",
+    7: "a person speaking with a gentle speech bubble, no text inside",
+    8: "colorful fireworks blooming in a night sky over a quiet town",
+    9: "a person seen from behind with focus on the upper back",
+    10: "a stylized zoo entrance with animal silhouettes visible inside",
+    11: "a small wooden boat drifting on calm water at sunset",
+    12: "a winding river flowing through green rolling hills",
+    13: "various raw cooking ingredients arranged on a wooden board",
+    14: "two figures facing each other with crossed arms, tense pose",
+    15: "a person pinching their nose with an exaggerated expression",
+    16: "an oddly-shaped object floating slightly above a small table",
+    17: "a fish or piece of food on a small grill with rising heat lines",
+    18: "a person cupping a hand to their ear, listening intently",
+    19: "a person peering through binoculars at a distant scene",
   },
 };
 
