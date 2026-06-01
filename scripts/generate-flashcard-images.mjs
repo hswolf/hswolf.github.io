@@ -14,6 +14,7 @@
 //   - n5-lesson19   (46 cards)
 //   - n5-lesson20   (42 cards, combines parts A and B)
 //   - n5-lesson20-c (19 cards, part C)
+//   - n5-lesson22   (45 cards, combines parts A and B)
 //
 // Setup (Pollinations – zero config):
 //   npm run gen:images                       # default deck
@@ -388,6 +389,53 @@ const ALL_PROMPTS = {
     17: "a fish or piece of food on a small grill with rising heat lines",
     18: "a person cupping a hand to their ear, listening intently",
     19: "a person peering through binoculars at a distant scene",
+  },
+  "n5-lesson22": {
+    1: "a person fanning their face under a bright sun, sweating, heat-stroke mood",
+    2: "two arrows pointing in opposite directions on a soft background",
+    3: "an illuminated exit doorway at the end of a quiet hallway",
+    4: "a train at a platform with a 'service paused' attendant gesture",
+    5: "a price tag with a small 'tax included' check mark",
+    6: "a plain price tag without any tax marker, simple number",
+    7: "a coin dropping into a tax-stamped box at a checkout counter",
+    8: "a hand pulling back from a hot stove with a small wisp of steam",
+    9: "a glowing green safety badge or hardhat icon",
+    10: "water flowing smoothly down a sink drain",
+    11: "footsteps approaching a small object on the ground, motion lines",
+    12: "two puzzle pieces clicking together perfectly, soft glow",
+    13: "a figure running away from something, motion blur trailing",
+    14: "a bandaged hand with a small red mark, careful gesture",
+    15: "a plate of food with a glass of water on a wooden table",
+    16: "a circular prohibition sign without a specific inner symbol",
+    17: "people walking toward an evacuation shelter sign, calm orderly line",
+    18: "a clock with hands behind schedule, train silhouette in background",
+    19: "a person straining to lift a heavy cardboard box, exaggerated effort",
+    20: "a person traveling a long path with a small package, dedicated journey",
+    21: "a large question mark floating above a tilted head",
+    22: "a sharp speech bubble with bold geometric lines, strong words mood",
+    23: "an exclamation-shaped bubble beside a confident male silhouette",
+    24: "a simple silhouette of an adult man in a neutral pose",
+    25: "a simple silhouette of an adult woman in a neutral pose",
+    26: "a stylized map with several speech bubbles placed over regions",
+    27: "a small toolbox containing a hammer, screwdriver, and tape measure",
+    28: "a Japanese torii gate framing a stone path leading into a shrine",
+    29: "a temple roof silhouette with a small bell hanging at the eave",
+    30: "a small bottle of soy sauce with a tiny dish beside it",
+    31: "a wall calendar with a single date circled in red",
+    32: "a clear tape dispenser with a strip pulled out",
+    33: "a small bowl of sauce with a spoon resting in it",
+    34: "a single dinner fork resting on a folded napkin",
+    35: "a figure mid-leap on a long elastic bungee cord, open-sky background",
+    36: "a salt shaker tipped over with grains spilled near a dish",
+    37: "a traditional Japanese tea ceremony set arranged in muted tones",
+    38: "a magnifying glass hovering over a screen with horizontal bars",
+    39: "a present being wrapped with ribbon and patterned paper",
+    40: "a small celebration cake with a single lit candle on top",
+    41: "two hands brought together in a polite gratitude gesture",
+    42: "a label tag attached to a gift box indicating its purpose",
+    43: "a men's section icon with a suit and tie on a store shelf",
+    44: "a women's section icon with a dress silhouette on a store shelf",
+    45: "a wrapped gift box with a ribbon, ready to be given",
   },
 };
 
