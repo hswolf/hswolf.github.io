@@ -1,0 +1,33 @@
+import type { Deck } from "./types";
+
+export const n5Lesson1C: Deck = {
+  slug: "n5-lesson1-c",
+  title: "Flashcard Sơ Cấp N5",
+  subtitle: "Từ vựng Bài 1 - Phần C",
+  cards: [
+    { id: 1, kanji: "辞書", hiragana: "じしょ", vietnamese: "từ điển", image: "1.webp" },
+    { id: 2, kanji: "かばん", hiragana: "かばん", vietnamese: "cặp, túi", image: "2.webp" },
+    { id: 3, kanji: "手帳", hiragana: "てちょう", vietnamese: "sổ tay", image: "3.webp" },
+    { id: 4, kanji: "電子辞書", hiragana: "でんしじしょ", vietnamese: "kim từ điển", image: "4.webp" },
+    { id: 5, kanji: "市役所", hiragana: "しやくしょ", vietnamese: "tòa thị chính", image: "5.webp" },
+    { id: 6, kanji: "交番", hiragana: "こうばん", vietnamese: "đồn cảnh sát", image: "6.webp" },
+    { id: 7, kanji: "大使館", hiragana: "たいしかん", vietnamese: "đại sứ quán", image: "7.webp" },
+    { id: 8, kanji: "電話番号", hiragana: "でんわばんごう", vietnamese: "số điện thoại", image: "8.webp" },
+    { id: 9, kanji: "月曜日", hiragana: "げつようび", vietnamese: "thứ Hai", image: "9.webp" },
+    { id: 10, kanji: "火曜日", hiragana: "かようび", vietnamese: "thứ Ba", image: "10.webp" },
+    { id: 11, kanji: "水曜日", hiragana: "すいようび", vietnamese: "thứ Tư", image: "11.webp" },
+    { id: 12, kanji: "木曜日", hiragana: "もくようび", vietnamese: "thứ Năm", image: "12.webp" },
+    { id: 13, kanji: "金曜日", hiragana: "きんようび", vietnamese: "thứ Sáu", image: "13.webp" },
+    { id: 14, kanji: "土曜日", hiragana: "どようび", vietnamese: "thứ Bảy", image: "14.webp" },
+    { id: 15, kanji: "日曜日", hiragana: "にちようび", vietnamese: "Chủ nhật", image: "15.webp" },
+    { id: 16, kanji: "何曜日", hiragana: "なんようび", vietnamese: "thứ mấy", image: "16.webp" },
+    { id: 17, kanji: "何", hiragana: "なん", vietnamese: "cái gì", image: "17.webp" },
+    { id: 18, kanji: "いくら", hiragana: "いくら", vietnamese: "bao nhiêu tiền", image: "18.webp" },
+    { id: 19, kanji: "~円", hiragana: "~えん", vietnamese: "yên (đơn vị tiền tệ của Nhật)", image: "19.webp" },
+    { id: 20, kanji: "~ドン", hiragana: "~ドン", vietnamese: "đồng (đơn vị tiền tệ của Việt Nam)", image: "20.webp" },
+    { id: 21, kanji: "本当だ", hiragana: "ほんとうだ", vietnamese: "Đúng thật / Thật này (khi nhận ra lời đối phương đúng sự thật)", image: "21.webp" },
+    { id: 22, kanji: "じゃ", hiragana: "じゃ", vietnamese: "Vậy thì, thế thì", image: "22.webp" },
+    { id: 23, kanji: "えっ", hiragana: "えっ", vietnamese: "Ô! (tiếng ngạc nhiên)", image: "23.webp" },
+    { id: 24, kanji: "ああ", hiragana: "ああ", vietnamese: "Ôi / À... (thán từ thể hiện sự ngại ngùng, bối rối, xấu hổ...)", image: "24.webp" },
+  ],
+};

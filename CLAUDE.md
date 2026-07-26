@@ -48,6 +48,9 @@ Routing:
 - `/japanese/flashcards/<slug>` — individual deck (Astro wrapper + React island + Tailwind). Generated statically via `getStaticPaths()` from the registry.
 
 Decks currently in the registry (`src/data/flashcards/index.ts`):
+- `n5-lesson1-a` — N5 Bài 1 - Phần A (42 cards, no images, no prompts)
+- `n5-lesson1-b` — N5 Bài 1 - Phần B (38 cards, no images, no prompts)
+- `n5-lesson1-c` — N5 Bài 1 - Phần C (24 cards, no images, no prompts)
 - `n5-lesson12-c` — N5 Bài 12 - Phần C (39 cards, fully imaged)
 - `n5-lesson15-1` — N5 Bài 15 - Phần 1 (21 cards, fully imaged)
 - `n5-lesson15-6` — N5 Bài 15 - Phần 6 (25 cards, fully imaged)
