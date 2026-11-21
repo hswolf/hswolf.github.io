@@ -1,0 +1,12 @@
+---
+// Hidden page: not in the nav, not in the sitemap, noindex. Only people with the link find it.
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import N3Review from "../../../components/n3-review/N3Review.tsx";
+import "../../../styles/tailwind.css";
+---
+
+<BaseLayout title="Ôn lỗi sai N3" description="Ôn lại các câu kanji, từ vựng, ngữ pháp N3 đã làm sai." noindex>
+  <N3Review client:only="react">
+    <p slot="fallback" class="text-center text-sm text-ink-muted">Đang tải…</p>
+  </N3Review>
+</BaseLayout>

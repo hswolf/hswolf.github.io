@@ -6,6 +6,7 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
+    "test": "node --experimental-strip-types --test 'src/**/*.test.ts'",
     "gen:images": "node --env-file-if-exists=.env scripts/generate-flashcard-images.mjs",
     "gen:images:hf": "PROVIDER=hf node --env-file=.env scripts/generate-flashcard-images.mjs"
   },

@@ -6,7 +6,12 @@ import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig({
   site: 'https://vinh.to',
-  integrations: [mdx(), sitemap(), react()],
+  integrations: [
+    mdx(),
+    // /japanese/n3/ is a hidden page: keep it out of the sitemap.
+    sitemap({ filter: (page) => !page.includes('/japanese/n3/') }),
+    react(),
+  ],
   markdown: {
     shikiConfig: {
       theme: 'github-light',

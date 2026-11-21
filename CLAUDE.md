@@ -2,7 +2,7 @@
 
 ## Overview
 
-Personal blog at `vinh.to`, built with Astro, deployed to GitHub Pages via `hswolf.github.io` repo. Also hosts interactive learning tools (Japanese flashcards) as React islands on specific routes.
+Personal blog at `vinh.to`, built with Astro, deployed to GitHub Pages via `hswolf.github.io` repo. Also hosts interactive learning tools (Japanese flashcards, a hidden N3 mistake-review app) as React islands on specific routes.
 
 ## Commands
 
@@ -10,6 +10,7 @@ Personal blog at `vinh.to`, built with Astro, deployed to GitHub Pages via `hswo
 npm run dev           # Dev server at localhost:4321
 npm run build         # Build to dist/
 npm run preview       # Preview built site
+npm test              # Unit tests for the N3 review logic (Node test runner, no deps)
 npm run gen:images    # Generate flashcard images (default: Pollinations, no key, deck=n5-lesson12-c)
 npm run gen:images:hf # Generate via Hugging Face (requires HF_TOKEN in .env)
 DECK=n5-lesson15-1 npm run gen:images   # Generate images for a specific deck
@@ -18,10 +19,10 @@ DECK=n5-lesson15-1 npm run gen:images   # Generate images for a specific deck
 ## Architecture
 
 - **Astro 5** static site generator with MDX, sitemap, RSS integrations
-- **React 19** via `@astrojs/react` — used as islands on routes that need interactivity (currently only the per-deck flashcard pages under `/japanese/flashcards/<slug>`)
+- **React 19** via `@astrojs/react` — used as islands on routes that need interactivity (the per-deck flashcard pages under `/japanese/flashcards/<slug>` and the hidden `/japanese/n3/` review app)
 - **Styling:**
   - **Pure CSS + CSS custom properties** for the content site (blog/life/poetry/about) and the flashcard index. Design tokens in `src/styles/global.css`.
-  - **Tailwind v4** (via `@tailwindcss/vite`) **page-scoped** to interactive pages — imported only where needed, e.g. `src/styles/tailwind.css` is imported by `src/pages/japanese/flashcards/[deck].astro` and nothing else. Does **not** leak into content pages.
+  - **Tailwind v4** (via `@tailwindcss/vite`) **page-scoped** to interactive pages — `src/styles/tailwind.css` is imported only by `src/pages/japanese/flashcards/[deck].astro` and `src/pages/japanese/n3/index.astro`. Does **not** leak into content pages.
 - **GitHub Pages** deployment via `.github/workflows/deploy.yml` (withastro/action)
 - **Custom domain** `vinh.to` via `public/CNAME`
 
@@ -76,6 +77,24 @@ Key files:
 - `scripts/generate-flashcard-images.mjs` — unified batch image generation. Pick provider with `PROVIDER=pollinations` (default) or `PROVIDER=hf`; pick deck with `DECK=<slug>` (default `n5-lesson12-c`).
 - `.env.example` → `.env` for `HF_TOKEN` (git-ignored)
 
+### N3 mistake review — `/japanese/n3/` (hidden)
+
+Quiz app for the kanji, vocabulary and grammar items the owner got wrong in N3 mock tests. React island (`client:only="react"`), page-scoped Tailwind, zen palette.
+
+- **Hidden:** no nav link, `noindex` meta (the `noindex` prop of `BaseLayout`), and a sitemap filter in `astro.config.mjs`. Do not link to it from other pages.
+- **Schedule:** Leitner boxes, `BOX_DAYS = [0, 1, 3, 7]`. A right answer moves a card up one box. A wrong answer sends it to box 0, and the card comes back once more in the same session. Box 3 is "mastered".
+- **Progress:** `localStorage` key `n3review:state`. Optional sync through one secret gist (`n3-review-progress.json`) on the owner's GitHub account. The owner pastes a fine-grained token (Gists: read and write) once per device. The token stays in that browser (`n3review:gh-token`) and goes only to api.github.com. Never commit a token or put one in `.env`.
+- **Merge:** per card, the newer `t` timestamp wins. Pushes wait 3 s after the last answer. A keepalive PATCH runs when the page goes hidden. The page pulls on load and when it becomes visible again.
+
+Key files:
+- `src/data/n3-review/cards.ts` — the cards. Card `id`s are progress keys: never rename one. Give new cards new ids.
+- `src/data/n3-review/types.ts` — `ReviewCard` type, area and source labels.
+- `src/lib/n3-review/progress.ts` — schedule and merge (pure functions).
+- `src/lib/n3-review/gist.ts` — `GistSync`: local storage plus gist sync.
+- `src/lib/n3-review/n3-review.test.ts` — `npm test`. Uses a fake GitHub API.
+- `src/components/n3-review/N3Review.tsx` — the island.
+- `src/pages/japanese/n3/index.astro` — page wrapper.
+
 ## Design
 
 - Minimalist zen aesthetic, **light mode only**
@@ -89,6 +108,11 @@ The zen tokens are duplicated in two places because the site is split between pu
 - `src/styles/tailwind.css` — `@theme` tokens that mirror the same colors/fonts for Tailwind utilities on interactive pages
 
 Keep the two in sync when tweaking tokens.
+
+CSS cascade traps on island pages (Tailwind lives in cascade layers, `global.css` mostly does not):
+- The `*` reset in `global.css` sits in `@layer base`. Unlayered, it beat every Tailwind margin and padding utility. Keep it layered.
+- `global.css` sets `--text-sm` … `--text-3xl` on `:root`, and these override Tailwind's `text-*` sizes. Use an arbitrary size (`text-[2rem]`) when the exact size matters.
+- Element rules in `global.css` (`h1`–`h6` font and weight, `a` color) beat utilities on those elements.
 
 ## Key files
 
