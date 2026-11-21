@@ -29,12 +29,16 @@
   --max-width-wide: 56rem;
 }
 
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+/* In a layer so it stays the weakest rule. Unlayered, it beat every Tailwind
+   margin and padding utility on the island pages (they live in @layer utilities). */
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
 }
 
 html {
