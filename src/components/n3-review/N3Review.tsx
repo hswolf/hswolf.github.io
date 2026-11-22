@@ -20,7 +20,7 @@ const BAD = "border-[#B5523B] bg-[#F7E6E0]";
 const SUMMARY = "flex cursor-pointer list-none items-center gap-2 [&::-webkit-details-marker]:hidden";
 
 const AREAS: Area[] = ["kanji", "vocab", "grammar"];
-const SOURCES: SourceId[] = ["dm-2111", "jlpt-1225", "dm-1411"];
+const SOURCES: SourceId[] = ["jlpt-0725", "dm-2111", "jlpt-1225", "dm-1411"];
 const byId = new Map(cards.map((c) => [c.id, c]));
 
 const STATUS: Record<SyncStatus, { label: string; dot: string }> = {

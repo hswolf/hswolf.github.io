@@ -1,9 +1,485 @@
-// Kanji, vocabulary and grammar mistakes from three N3 mock tests, ported from the
-// "Sổ lỗi sai N3" notebook on 2026-11-21. Edit by hand from here on.
+// Kanji, vocabulary and grammar mistakes from N3 tests, ported from the "Sổ lỗi sai N3"
+// notebook on 2026-11-21 (JLPT 7/2025 cards added 2026-11-22). Edit by hand from here on.
 // Card ids are progress keys in localStorage and the sync gist: never rename them.
 import type { ReviewCard } from "./types.ts";
 
 export const cards: ReviewCard[] = [
+  {
+    "id": "sv3",
+    "area": "kanji",
+    "source": "jlpt-0725",
+    "title": "地面 (じめん)",
+    "tag": "Chữ Hán · đọc",
+    "where": "Từ vựng · câu 3",
+    "gist": "Đọc 地面 (mặt đất ướt vì mưa).",
+    "pick": "ちめん",
+    "ans": "じめん",
+    "why": "地 có hai âm: ち và じ. Trong 地面 đọc じ, nên là じめん. ちめん không phải từ thường dùng. Từ dễ nhầm là 地名 (ちめい, tên địa danh).",
+    "note": "地 đọc じ: 地面 (じめん), 地震 (じしん), 地元 (じもと). 地 đọc ち: 地図 (ちず), 地下 (ちか), 地球 (ちきゅう), 地方 (ちほう). Học theo từ, đừng đoán theo chữ.",
+    "examples": [
+      [
+        "地震で地面が大きくゆれた。",
+        "Mặt đất rung mạnh vì động đất."
+      ],
+      [
+        "駅で町の地図をもらった。",
+        "Tôi lấy bản đồ thị trấn ở nhà ga."
+      ]
+    ],
+    "quiz": {
+      "q": "Đọc 地面 trong câu: 落ちたりんごが地面を転がった。",
+      "options": [
+        "ちめん",
+        "じめい",
+        "じめん",
+        "ちめい"
+      ],
+      "answer": 2,
+      "explain": "地面 = じめん (地 đọc じ)."
+    }
+  },
+  {
+    "id": "sv4",
+    "area": "kanji",
+    "source": "jlpt-0725",
+    "title": "移す (うつす)",
+    "tag": "Chữ Hán · đọc",
+    "where": "Từ vựng · câu 4",
+    "gist": "Đọc 移した (chuyển tiền sang cái hộp kia).",
+    "pick": "もどした",
+    "ans": "うつした",
+    "why": "移す đọc うつす, nghĩa là chuyển vật sang chỗ khác. もどす là 戻す, nghĩa là trả về chỗ cũ. Hai từ khác chữ và khác nghĩa.",
+    "note": "移す (tha động từ) ↔ 移る (tự động từ): 席を移す, 新しい家に移る. Âm Hán い: 移動 (いどう), 移転 (いてん). 戻す: 本を棚に戻す. 隠す (かくす) = giấu.",
+    "examples": [
+      [
+        "机を窓の近くに移した。",
+        "Tôi chuyển cái bàn đến gần cửa sổ."
+      ],
+      [
+        "読んだ本は、元の棚に戻してください。",
+        "Sách đọc xong xin để lại kệ cũ."
+      ]
+    ],
+    "quiz": {
+      "q": "Đọc 移す trong câu: 会議の場所を三階の部屋に移すことになった。",
+      "options": [
+        "うつす",
+        "もどす",
+        "わたす",
+        "かえす"
+      ],
+      "answer": 0,
+      "explain": "移す = うつす (chuyển sang chỗ khác)."
+    }
+  },
+  {
+    "id": "sv19",
+    "area": "vocab",
+    "source": "jlpt-0725",
+    "title": "距離 (きょり)",
+    "tag": "Chọn từ",
+    "where": "Từ vựng · câu 19",
+    "gist": "Hỏi khoảng cách từ đây đến tòa thị chính là bao xa.",
+    "pick": "途中",
+    "ans": "距離",
+    "why": "〜までの距離はどのくらい = khoảng cách đến một nơi là bao xa. 途中 là ‘giữa đường, đang đi thì…’ (途中で), không đo được ‘bao xa’. 徒歩 là đi bộ, 方向 là hướng.",
+    "note": "距離: 〜までの距離, 長い距離を歩く. 途中: 帰る途中で, 途中まで. 徒歩: 駅から徒歩10分. 方向: 駅の方向.",
+    "examples": [
+      [
+        "家から学校までの距離は3キロぐらいです。",
+        "Từ nhà đến trường khoảng 3 km."
+      ],
+      [
+        "会社へ行く途中で、コーヒーを買った。",
+        "Tôi mua cà phê trên đường đến công ty."
+      ]
+    ],
+    "quiz": {
+      "q": "Chọn từ điền vào chỗ trống: 東京から大阪までの（　）は約500キロです。",
+      "options": [
+        "途中",
+        "距離",
+        "方向",
+        "徒歩"
+      ],
+      "answer": 1,
+      "explain": "Khoảng cách → 距離."
+    }
+  },
+  {
+    "id": "sv22",
+    "area": "vocab",
+    "source": "jlpt-0725",
+    "title": "思いつく",
+    "tag": "Chọn từ",
+    "where": "Từ vựng · câu 22",
+    "gist": "Hỏi có ai nghĩ ra cách hay để giải quyết vấn đề không.",
+    "pick": "引き受けた",
+    "ans": "思いついた",
+    "why": "方法を思いつく = chợt nghĩ ra cách. 引き受ける = nhận làm một việc hoặc lời nhờ, không đi với 方法. Hai từ còn lại: 知り合う = quen biết nhau, 取り替える = đổi sang cái khác.",
+    "note": "思いつく: いい考えを思いつく, アイデアを思いつく. 引き受ける: 仕事を引き受ける, 役を引き受ける. 取り替える: 古い電池を取り替える.",
+    "examples": [
+      [
+        "シャワーを浴びているときに、いいアイデアを思いついた。",
+        "Lúc đang tắm, tôi chợt nghĩ ra một ý hay."
+      ],
+      [
+        "友だちに頼まれて、通訳の仕事を引き受けた。",
+        "Bạn nhờ nên tôi nhận việc phiên dịch."
+      ]
+    ],
+    "quiz": {
+      "q": "Chọn từ điền vào chỗ trống: 夜、ベッドの中で新しい話のアイデアを（　）。",
+      "options": [
+        "引き受けた",
+        "取り替えた",
+        "思いついた",
+        "知り合った"
+      ],
+      "answer": 2,
+      "explain": "Chợt nghĩ ra ý tưởng → 思いついた."
+    }
+  },
+  {
+    "id": "sv27",
+    "area": "vocab",
+    "source": "jlpt-0725",
+    "title": "そっと",
+    "tag": "Từ gần nghĩa",
+    "where": "Từ vựng · câu 27",
+    "gist": "Chọn từ gần nghĩa nhất với そっと (hai người lặng lẽ ra khỏi phòng).",
+    "pick": "急いで",
+    "ans": "静かに",
+    "why": "そっと = nhẹ nhàng, khẽ, để không gây tiếng động hoặc không ai để ý. Gần nghĩa nhất là 静かに. 急いで (vội vàng) gần như ngược ý.",
+    "note": "そっと: そっとドアを閉める, そっと見る. そっとしておく = để yên, đừng làm phiền. Từ cùng nhóm: こっそり (lén lút), ゆっくり (chậm rãi).",
+    "examples": [
+      [
+        "赤ちゃんが寝ているので、そっとドアを閉めた。",
+        "Em bé đang ngủ nên tôi khẽ đóng cửa."
+      ],
+      [
+        "彼は今悲しんでいるから、そっとしておこう。",
+        "Anh ấy đang buồn, cứ để yên cho anh ấy."
+      ]
+    ],
+    "quiz": {
+      "q": "Chọn từ gần nghĩa nhất với 「そっと」: 彼女はそっと手紙を机に置いた。",
+      "options": [
+        "急いで",
+        "静かに",
+        "二回",
+        "楽しそうに"
+      ],
+      "answer": 1,
+      "explain": "そっと = nhẹ nhàng, không gây tiếng động = 静かに."
+    }
+  },
+  {
+    "id": "sv33",
+    "area": "vocab",
+    "source": "jlpt-0725",
+    "title": "ばらばら (cách dùng)",
+    "tag": "Cách dùng từ",
+    "where": "Từ vựng · câu 33",
+    "gist": "Chọn câu dùng ばらばら đúng.",
+    "pick": "câu ‘nước ép đổ ra, ばらばら’",
+    "ans": "câu ‘tài liệu rơi xuống sàn, ばらばら’",
+    "why": "ばらばら = những thứ vốn đi cùng nhau bị rời ra, tản mát (giấy tờ, đồ vật, ý kiến, nhóm người). Nước ép đổ thì dùng こぼれる. Kem chảy thì dùng 溶ける. Không khí ấm thoát ra thì dùng 逃げる.",
+    "note": "ばらばら: 資料がばらばらになる, 意見がばらばらだ, 家族がばらばらに住む. Chất lỏng đổ: こぼれる. Tan chảy: 溶ける (とける). Vỡ vụn: 粉々 (こなごな).",
+    "examples": [
+      [
+        "袋が破れて、豆が床にばらばらに落ちた。",
+        "Túi rách, đậu rơi tung tóe xuống sàn."
+      ],
+      [
+        "会議ではみんなの意見がばらばらで、何も決まらなかった。",
+        "Trong cuộc họp, mỗi người một ý nên chẳng quyết được gì."
+      ]
+    ],
+    "quiz": {
+      "q": "Chọn câu dùng ばらばら đúng.",
+      "options": [
+        "コップの水がばらばらになって、テーブルがぬれた。",
+        "強い風で、集めた紙がばらばらになった。",
+        "熱いお湯で、バターがばらばらになった。",
+        "窓を開けたら、部屋の空気がばらばらになった。"
+      ],
+      "answer": 1,
+      "explain": "Giấy đã gom bị gió thổi tản ra → ばらばら."
+    }
+  },
+  {
+    "id": "sg5",
+    "area": "grammar",
+    "source": "jlpt-0725",
+    "title": "〜うちに (khi còn…)",
+    "tag": "Ngoài PDF",
+    "where": "Ngữ pháp · câu 5",
+    "gist": "Chương trình nấu ăn: luộc khoai xong thì bóc vỏ khi khoai còn nóng.",
+    "pick": "ことで",
+    "ans": "うちに",
+    "why": "Aい + うちに = làm khi trạng thái còn tiếp diễn, trước khi nó thay đổi (còn nóng thì dễ bóc, nguội rồi thì khó). ことで = bằng cách, nhờ việc… (nêu phương tiện), không hợp.",
+    "note": "Aい / Aな な / N の / V ている + うちに = trong lúc còn… (làm trước khi đổi): 熱いうちに食べて, 若いうちに, 明るいうちに帰る, 忘れないうちにメモする. Nghĩa thứ hai: V ている + うちに = đang làm… thì (tự nhiên) xảy ra.",
+    "examples": [
+      [
+        "料理が冷めないうちに、どうぞ召し上がってください。",
+        "Mời anh dùng khi món ăn còn chưa nguội."
+      ],
+      [
+        "若いうちに、いろいろな国へ行ってみたい。",
+        "Tôi muốn đi nhiều nước khi còn trẻ."
+      ]
+    ],
+    "quiz": {
+      "q": "Chọn từ điền vào chỗ trống: 雨が降らない（　）、洗濯物を取り込もう。",
+      "options": [
+        "うちに",
+        "ところで",
+        "までに",
+        "ことで"
+      ],
+      "answer": 0,
+      "explain": "Làm trước khi trời mưa → 降らないうちに."
+    }
+  },
+  {
+    "id": "sg8",
+    "area": "grammar",
+    "source": "jlpt-0725",
+    "title": "何を〜たら、〜だろうか",
+    "tag": "Ngoài PDF",
+    "where": "Ngữ pháp · câu 8",
+    "gist": "Đang nghĩ quà sinh nhật cho em trai: tặng gì thì em sẽ vui?",
+    "pick": "あげるから",
+    "ans": "あげたら",
+    "why": "Câu hỏi giả định ‘nếu tặng cái gì thì…’ dùng 〜たら. 〜から là ‘vì’, nêu lý do có thật, không ghép với câu hỏi kiểu này. Thêm nữa: mình tặng em nên dùng あげる, không dùng くれる (người khác cho mình).",
+    "note": "Từ để hỏi + 〜たら / 〜ば + 〜だろう(か) / 〜いい(か): 何を買ったら喜ぶだろう, どうしたらいいですか, どこに行けば会えるだろう. あげる = mình (hoặc người khác) cho người ngoài. くれる = người khác cho mình hoặc phía mình.",
+    "examples": [
+      [
+        "どうしたら、日本語が上手になるだろうか。",
+        "Làm sao để giỏi tiếng Nhật đây?"
+      ],
+      [
+        "母の日に、何をあげたら喜んでもらえるかな。",
+        "Ngày của Mẹ, tặng gì thì mẹ vui nhỉ?"
+      ]
+    ],
+    "quiz": {
+      "q": "Chọn từ điền vào chỗ trống: 友だちの結婚祝いに、何を（　）喜ぶだろうか。",
+      "options": [
+        "くれたら",
+        "あげたら",
+        "くれるから",
+        "あげるので"
+      ],
+      "answer": 1,
+      "explain": "Mình tặng bạn + giả định → あげたら."
+    }
+  },
+  {
+    "id": "sg9",
+    "area": "grammar",
+    "source": "jlpt-0725",
+    "title": "持ってく (= 持っていく)",
+    "tag": "PDF 139 · văn nói",
+    "where": "Ngữ pháp · câu 9",
+    "gist": "Bạn hỏi mượn lại cuốn tiểu thuyết. Đáp: ‘Ừ, mai mình mang đến trường nhé.’",
+    "pick": "持ってる",
+    "ans": "持ってく",
+    "why": "Mang vật đến một nơi khác (trường) là 持っていく, văn nói rút gọn thành 持ってく. 持ってる là 持っている (đang cầm, đang có), không đi với 学校に. 持っとく là 持っておく (cầm sẵn). 持っちゃう là 持ってしまう.",
+    "note": "Dạng rút gọn trong văn nói: 〜ていく → 〜てく, 〜ている → 〜てる, 〜ておく → 〜とく, 〜てしまう → 〜ちゃう. Đổi về dạng gốc rồi mới chọn. V ていく = làm rồi đi tới chỗ khác (PDF 139).",
+    "examples": [
+      [
+        "あした、お弁当を持ってくね。",
+        "Mai mình mang cơm hộp đi nhé."
+      ],
+      [
+        "このペン、ちょっと借りてくね。",
+        "Mình mượn cây bút này mang đi một lát nhé."
+      ]
+    ],
+    "quiz": {
+      "q": "Chọn đáp án đúng: A「この傘、借りてもいい？」 B「いいよ。雨が降りそうだから（　）。」",
+      "options": [
+        "持ってって",
+        "持ってた",
+        "持っちゃった",
+        "持ってない"
+      ],
+      "answer": 0,
+      "explain": "持ってって = 持っていって (cứ mang đi)."
+    }
+  },
+  {
+    "id": "sg10",
+    "area": "grammar",
+    "source": "jlpt-0725",
+    "title": "〜といいね (mong là…)",
+    "tag": "Ngoài PDF",
+    "where": "Ngữ pháp · câu 10",
+    "gist": "Hai tuần nữa đi leo núi, rất mong. Đáp: ‘Ừ, mong là trời nắng nhỉ.’",
+    "pick": "晴れてよかった",
+    "ans": "晴れるといい",
+    "why": "Chuyến đi chưa diễn ra, nên câu đáp phải là mong ước: 晴れるといいね. 晴れてよかった (may mà trời nắng) dùng sau khi việc đã xảy ra. 晴れてきた (trời bắt đầu nắng) và 晴れるんだ (trời sẽ nắng à) không hợp.",
+    "note": "V る + といい(ね / な / けど) = mong là…. V て + よかった = may là đã…. Nhìn thời điểm: việc sắp tới → といい. Việc đã xong → てよかった.",
+    "examples": [
+      [
+        "明日の試験、うまくいくといいね。",
+        "Mong bài thi ngày mai suôn sẻ nhé."
+      ],
+      [
+        "昨日は晴れてよかったね。",
+        "May mà hôm qua trời nắng nhỉ."
+      ]
+    ],
+    "quiz": {
+      "q": "Chọn đáp án đúng: A「来月、日本語の試験を受けるんだ。」 B「そうなんだ。合格（　）ね。」",
+      "options": [
+        "できてよかった",
+        "できるといい",
+        "できたんだ",
+        "できてきた"
+      ],
+      "answer": 1,
+      "explain": "Việc chưa xảy ra → mong ước: できるといいね."
+    }
+  },
+  {
+    "id": "sg11",
+    "area": "grammar",
+    "source": "jlpt-0725",
+    "title": "ご〜になれます (tôn kính, khả năng)",
+    "tag": "Ngoài PDF",
+    "where": "Ngữ pháp · câu 11",
+    "gist": "Trang web thành phố: buổi nói chuyện, cư dân nào cũng có thể tham gia miễn phí.",
+    "pick": "ご参加になっています",
+    "ans": "ご参加になれます",
+    "why": "Người tham gia là cư dân, tức là khách, nên dùng tôn kính ngữ. ‘Có thể’ thì dùng dạng khả năng: ご参加になる → ご参加になれる. ご参加になっています là ‘đang tham gia’, sai nghĩa. 参加いたします là khiêm nhường ngữ, dùng cho chính mình.",
+    "note": "Tôn kính: お / ご + V + になる → khả năng: お / ご + V + になれる (ご利用になれます, お使いになれます). Cách khác hay gặp: ご参加いただけます. Khiêm nhường (mình làm): ご〜いたします, お〜します.",
+    "examples": [
+      [
+        "このカードは、全国のお店でお使いになれます。",
+        "Thẻ này dùng được ở cửa hàng trên toàn quốc."
+      ],
+      [
+        "会員の方は、どなたでも無料でご利用になれます。",
+        "Hội viên ai cũng có thể dùng miễn phí."
+      ]
+    ],
+    "quiz": {
+      "q": "Chọn đáp án đúng: （図書館のお知らせ）館内のパソコンは、どなたでも（　）。",
+      "options": [
+        "ご利用いたします",
+        "ご利用になれます",
+        "ご利用しております",
+        "ご利用になっています"
+      ],
+      "answer": 1,
+      "explain": "Khách có thể dùng → ご利用になれます."
+    }
+  },
+  {
+    "id": "sg14",
+    "area": "grammar",
+    "source": "jlpt-0725",
+    "title": "〜に比べると + ô ★",
+    "tag": "PDF 101",
+    "where": "Ngữ pháp · câu 14 (xếp câu)",
+    "gist": "Hè năm nay cũng nóng, nhưng so với hè năm ngoái nóng bất thường thì thấy mát hơn nhiều.",
+    "pick": "異常な (mảnh đứng đầu)",
+    "ans": "去年の夏に (mảnh ở ô thứ 3)",
+    "why": "Câu đúng: 異常な → 暑さだった → 去年の夏に → 比べると. Ô ★ là ô thứ 3: 去年の夏に. Bạn chọn 異常な, là mảnh đứng đầu. Có thể bạn xếp đúng nhưng lấy nhầm ô.",
+    "note": "N + に比べて / に比べると = so với N (PDF 101). Cụm bổ nghĩa đứng trước danh từ: 異常な暑さだった + 去年の夏. Cách làm: sắp đủ 4 mảnh, đánh số ① ② ③ ④, đọc lại cả câu rồi mới lấy mảnh ở ô ★.",
+    "examples": [
+      [
+        "兄に比べると、弟はおとなしい。",
+        "So với anh trai thì em trai trầm tính hơn."
+      ],
+      [
+        "去年に比べて、今年は雪が少ない。",
+        "So với năm ngoái, năm nay ít tuyết."
+      ]
+    ],
+    "quiz": {
+      "q": "Xếp 4 mảnh vào 4 ô của câu 「この町は、＿＿ ＿＿ ★ ＿＿ずっと静かだ。」(★ ở ô thứ 3). A 比べると / B 前に住んでいた / C 町に / D にぎやかな. Mảnh nào nằm ở ô ★?",
+      "options": [
+        "A 比べると",
+        "B 前に住んでいた",
+        "C 町に",
+        "D にぎやかな"
+      ],
+      "answer": 2,
+      "explain": "Câu đúng: B → D → C → A (前に住んでいたにぎやかな町に比べると). Ô thứ 3 là C."
+    }
+  },
+  {
+    "id": "sg16",
+    "area": "grammar",
+    "source": "jlpt-0725",
+    "title": "いつのまにか〜ので驚いた + ô ★",
+    "tag": "Ngoài PDF",
+    "where": "Ngữ pháp · câu 16 (xếp câu)",
+    "gist": "Sau bữa trưa đến thư viện đọc sách, không biết từ lúc nào trời đã tối nên giật mình.",
+    "pick": "いつのまにか (mảnh đứng đầu)",
+    "ans": "ので (mảnh ở ô thứ 3)",
+    "why": "Câu đúng: いつのまにか → 外が暗くなっていた → ので → 驚いた. Ô ★ là ô thứ 3: ので. Bạn chọn いつのまにか, là mảnh đứng đầu. Giống câu 14: có thể bạn xếp đúng nhưng lấy nhầm ô.",
+    "note": "いつのまにか = không biết từ lúc nào. Thứ tự hay gặp: trạng từ → sự việc → ので (lý do) → cảm xúc (驚いた). 〜ていたら = đang làm… thì (phát hiện điều gì). Đề in ô 2 và ô 3 dính liền nhau, nên càng phải đếm từng ô.",
+    "examples": [
+      [
+        "テレビを見ていたら、いつのまにか寝てしまった。",
+        "Đang xem TV thì ngủ lúc nào không hay."
+      ],
+      [
+        "ドアを開けたら、部屋に誰もいなかったので驚いた。",
+        "Mở cửa ra thì không có ai trong phòng nên tôi giật mình."
+      ]
+    ],
+    "quiz": {
+      "q": "Xếp 4 mảnh vào 4 ô của câu 「朝起きて窓を開けたら＿＿ ＿＿ ★ ＿＿。」(★ ở ô thứ 3). A ので / B うれしくなった / C 外が真っ白になっていた / D 夜の間に雪が降って. Mảnh nào nằm ở ô ★?",
+      "options": [
+        "A ので",
+        "B うれしくなった",
+        "C 外が真っ白になっていた",
+        "D 夜の間に雪が降って"
+      ],
+      "answer": 0,
+      "explain": "Câu đúng: D → C → A → B (夜の間に雪が降って外が真っ白になっていたのでうれしくなった). Ô thứ 3 là A."
+    }
+  },
+  {
+    "id": "sg19",
+    "area": "grammar",
+    "source": "jlpt-0725",
+    "title": "それでも (dù vậy)",
+    "tag": "Ngoài PDF",
+    "where": "Ngữ pháp · câu 19 (điền đoạn văn)",
+    "gist": "Bài văn đi trượt tuyết: xuống xe buýt thấy rất lạnh, muốn vào chỗ ấm. Câu sau: đã cất công đến nên vẫn bắt đầu tập.",
+    "pick": "実は",
+    "ans": "それでも",
+    "why": "Câu trước: lạnh, muốn vào chỗ ấm. Câu sau: vẫn bắt đầu tập. Hai câu ngược chiều, nên cần liên từ ‘dù vậy’: それでも. 実は (thật ra) dùng để tiết lộ điều người nghe chưa biết. 例えば (ví dụ) và また (ngoài ra) cũng không hợp.",
+    "note": "Chọn liên từ: so ý câu trước với câu sau. Ngược chiều → でも, それでも, しかし. Thêm ý → また, そのうえ. Ví dụ → 例えば. Tiết lộ → 実は. せっかく〜のだから = đã cất công… thì.",
+    "examples": [
+      [
+        "熱があった。それでも、彼は会社へ行った。",
+        "Anh ấy bị sốt. Dù vậy, anh vẫn đi làm."
+      ],
+      [
+        "何度も失敗した。それでも、あきらめなかった。",
+        "Tôi thất bại nhiều lần. Dù vậy, tôi không bỏ cuộc."
+      ]
+    ],
+    "quiz": {
+      "q": "Chọn liên từ điền vào chỗ trống: 道はとても混んでいた。（　）、約束の時間には間に合った。",
+      "options": [
+        "例えば",
+        "それでも",
+        "実は",
+        "また"
+      ],
+      "answer": 1,
+      "explain": "Đường đông nhưng vẫn kịp → ngược chiều: それでも."
+    }
+  },
   {
     "id": "qv1",
     "area": "kanji",

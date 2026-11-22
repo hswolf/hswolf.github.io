@@ -1,6 +1,6 @@
 export type Area = "kanji" | "vocab" | "grammar";
 
-export type SourceId = "dm-2111" | "jlpt-1225" | "dm-1411";
+export type SourceId = "jlpt-0725" | "dm-2111" | "jlpt-1225" | "dm-1411";
 
 export type ReviewCard = {
   /** Progress key in localStorage and the sync gist. Never rename. */
@@ -30,6 +30,7 @@ export const AREA_LABELS: Record<Area, string> = {
 };
 
 export const SOURCE_LABELS: Record<SourceId, string> = {
+  "jlpt-0725": "JLPT 7/2025",
   "dm-2111": "Dungmori 21/11",
   "jlpt-1225": "JLPT 12/2025",
   "dm-1411": "Dungmori 14/11",
