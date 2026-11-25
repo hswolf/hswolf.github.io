@@ -11,6 +11,8 @@ test("cards: unique ids, three areas, valid quiz answers", () => {
   for (const c of cards) {
     assert.ok(c.quiz.answer >= 0 && c.quiz.answer < c.quiz.options.length, c.id);
     assert.equal(c.examples.length, 2, c.id);
+    // A ★ question must print the sentence with its 4 blanks, or "ô thứ 3" points at nothing.
+    if (c.quiz.q.includes("ô ★")) assert.match(c.quiz.q, /「[^」]*★[^」]*」/, c.id);
   }
 });
 

@@ -1659,7 +1659,7 @@ export const cards: ReviewCard[] = [
       ]
     ],
     "quiz": {
-      "q": "Xếp 4 mảnh vào 4 ô của câu có ★ ở ô thứ 3. A 読んだこと / B で / C 新聞 / D か何か. Mảnh nào nằm ở ô ★?",
+      "q": "Xếp 4 mảnh vào 4 ô của câu 「その話は前に＿＿ ＿＿ ★ ＿＿がある。」(★ ở ô thứ 3). A 読んだこと / B で / C 新聞 / D か何か. Mảnh nào nằm ở ô ★?",
       "options": [
         "A 読んだこと",
         "B で",
@@ -2509,7 +2509,7 @@ export const cards: ReviewCard[] = [
       ]
     ],
     "quiz": {
-      "q": "Xếp 4 mảnh vào 4 ô của câu có ★ ở ô thứ 3. A 寝ようとした / B かかってきた / C 友だちから電話が / D ところに. Mảnh nào nằm ở ô ★?",
+      "q": "Xếp 4 mảnh vào 4 ô của câu 「ゆうべ、＿＿ ＿＿ ★ ＿＿。」(★ ở ô thứ 3). A 寝ようとした / B かかってきた / C 友だちから電話が / D ところに. Mảnh nào nằm ở ô ★?",
       "options": [
         "A 寝ようとした",
         "B かかってきた",
@@ -2517,7 +2517,7 @@ export const cards: ReviewCard[] = [
         "D ところに"
       ],
       "answer": 2,
-      "explain": "Câu đúng: A → D → C → B. Ô thứ 3 là C."
+      "explain": "Câu đúng: A → D → C → B (寝ようとしたところに友だちから電話がかかってきた). Ô thứ 3 là C."
     }
   },
   {
